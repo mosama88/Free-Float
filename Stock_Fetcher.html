@@ -122,6 +122,35 @@
             <div>التوصية = <b>حجم Free Float بالمليون سهم</b></div>
         </div>
 
+
+
+
+
+
+        <!-- بعد الـ session-bar -->
+        <section class="bidask-search">
+            <input type="text" id="baSymbol" placeholder="AAPL">
+            <button id="baFetch">🔍 جيب Bid/Ask</button>
+        </section>
+
+        <!-- Bid/Ask display -->
+        <section class="bidask-display" id="bidaskDisplay" hidden>
+            <div class="ba-card bid">
+                <div class="label">BID</div>
+                <div class="price" id="baBid">—</div>
+            </div>
+            <div class="ba-card ask">
+                <div class="label">ASK</div>
+                <div class="price" id="baAsk">—</div>
+            </div>
+            <div class="ba-info">
+                <div>Spread: <b id="baSpread">—</b></div>
+                <div>Mid: <b id="baMid">—</b></div>
+                <div>Last: <b id="baLast">—</b></div>
+            </div>
+        </section>
+
+
         <details class="holidays">
             <summary>📅 عطلات السوق الأمريكي <span id="holYear"></span> (اضغط للعرض)</summary>
             <ul id="holidayList"></ul>
@@ -150,6 +179,7 @@
     <script src="assets/js/analyzer.js" defer></script>
     <script src="assets/js/stock-fetcher.js" defer></script>
     <script src="assets/js/app.js" defer></script>
+    <script src="assets/js/bid-ask.js" defer></script>
 
 </body>
 
