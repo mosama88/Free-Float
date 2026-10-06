@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Stock Fetcher · Yahoo Finance</title>
+    <title>Stock Analyzer · Fetcher + Free Float + Sessions</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet"
@@ -14,21 +14,19 @@
 
 <body>
 
-    <div class="app narrow">
+    <div class="app">
+
         <header class="header-row">
             <div class="header-left">
-                <h1>📈 Stock Data Fetcher</h1>
-                <p class="sub">اكتب رمز السهم (مثلاً NVDA) والصفحة تجيب السعر والـ Float والـ Volume من Trading View
-                    Finance
-                    وتجهزهم للمحلل.</p>
+                <h1>📊 Stock Analyzer</h1>
+                <p class="sub">ابحث عن سهم، هات بياناته من الـ Worker، وأضفه للجدول — الصفحة تحسب RVOL و Float Rotation
+                    وتقولك التوصية.</p>
             </div>
-
             <div class="header-right">
                 <nav class="nav-links">
-                    <a class="nav-link active" href="Stock_Fetcher.html">📈 Stock Fetcher</a>
-                    <a class="nav-link" href="Free_Float_Calc.html">🧮 Free Float Calc</a>
+                    <a class="nav-link active" href="Stock_Fetcher.html">📈 Fetcher</a>
+                    <a class="nav-link" href="Free_Float_Calc.html">🧮 Free Float</a>
                 </nav>
-
                 <div class="theme-toggle" role="group" aria-label="Theme">
                     <button class="theme-btn" data-theme-set="system" type="button">Auto</button>
                     <button class="theme-btn" data-theme-set="dark" type="button">🌙 Dark</button>
@@ -37,29 +35,97 @@
             </div>
         </header>
 
+        <section class="session-bar" aria-live="off">
+            <span class="session-dot" id="sessionDot"></span>
+            <div class="session-info">
+                <div class="session-name" id="sessionName">—</div>
+                <div class="session-time" id="sessionTime">—</div>
+                <div class="session-local" id="sessionLocal"></div>
+            </div>
+            <div class="countdown-wrap">
+                <div class="countdown-label" id="countdownLabel">—</div>
+                <div class="countdown" id="countdown">--:--:--</div>
+            </div>
+            <button class="notif-btn" id="notifBtn" type="button">🔔 فعّل التنبيهات</button>
+        </section>
+
         <div class="settings">
             <label for="workerUrl">رابط الـ Worker الخاص بك (مطلوب عشان يجيب الـ Float بثبات)</label>
             <input type="text" id="workerUrl" placeholder="https://اسم-الـworker.workers.dev" autocomplete="off"
                 spellcheck="false">
-            <p class="hint">من غير Worker الصفحة بتجرب بروكسيات عامة (غالبًا بتفشل وبتجيب السعر بس من غير Float). خطوات
-                عمل الـ Worker في آخر الصفحة.</p>
+            <p class="hint">من غير Worker الصفحة بتجرب بروكسيات عامة (بتجيب السعر بس من غير Float).</p>
         </div>
 
         <div class="search">
             <input type="text" id="symbol" placeholder="رمز السهم (مثلاً NVDA)" autocomplete="off"
                 autocapitalize="characters">
             <button id="fetchBtn" type="button">🔍 جيب البيانات</button>
-            <button id="clearBtn" type="button" class="ghost"
-                style="background: var(--bg-card); color: var(--err); border: 1px solid var(--border);">🗑️ مسح
-                البيانات</button>
+            <button id="addToTableBtn" type="button">➕ أضف للجدول</button>
+            <button id="clearBtn" type="button" class="ghost">🗑️ مسح</button>
         </div>
-
-
 
         <div class="status" id="status">جاهز...</div>
 
         <div id="ready"></div>
         <div class="grid" id="cards"></div>
+
+        <section class="bar" aria-label="حدود التقييم">
+            <label for="low">كويس لو Free Float أقل من <input type="number" id="low" min="0" step="1" value="20">
+                M</label>
+            <label for="high">خطر لو Free Float أكبر من <input type="number" id="high" min="0" step="1" value="50">
+                M</label>
+            <span class="hint">الحدود بالمليون سهم. أقل من 20M = float خفيف، أكتر من 50M = float تقيل.</span>
+        </section>
+
+        <section class="summary" aria-live="polite">
+            <div class="sum good"><span>كويسة</span><b id="cGood">0</b></div>
+            <div class="sum mid"><span>متوسطة</span><b id="cMid">0</b></div>
+            <div class="sum bad"><span>خطر</span><b id="cBad">0</b></div>
+            <div class="sum warn"><span>راجع الأرقام</span><b id="cWarn">0</b></div>
+        </section>
+
+        <div class="tablewrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Market Cap</th>
+                        <th>Price ($)</th>
+                        <th class="calc">Total Shares (M)</th>
+                        <th>Free Float</th>
+                        <th class="calc">Locked (M)</th>
+                        <th class="calc">Float %</th>
+                        <th>Vol (M)</th>
+                        <th>Avg Vol (M)</th>
+                        <th class="calc">RVOL</th>
+                        <th class="calc">Float Rot.</th>
+                        <th>التوصية</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="rows"></tbody>
+            </table>
+        </div>
+
+        <div class="actions">
+            <button class="btn ghost" id="resetBtn" type="button">🗑️ مسح الجدول</button>
+            <button class="btn ghost" id="exportBtn" type="button">⬇️ تصدير CSV</button>
+            <span class="note">الخلايا الزرقاء بتتحسب لوحدها. عدّل أي خانة يدويًا وهتتحدث الحسابات.</span>
+        </div>
+
+        <div class="legend">
+            <div>Total Shares = <b>Market Cap ÷ Price</b></div>
+            <div>Locked = <b>Total − Free Float</b></div>
+            <div>Float % = <b>Free Float ÷ Total</b></div>
+            <div>RVOL = <b>Vol ÷ Avg Vol</b></div>
+            <div>Float Rotation = <b>Vol ÷ Free Float</b></div>
+            <div>التوصية = <b>حجم Free Float بالمليون سهم</b></div>
+        </div>
+
+        <details class="holidays">
+            <summary>📅 عطلات السوق الأمريكي <span id="holYear"></span> (اضغط للعرض)</summary>
+            <ul id="holidayList"></ul>
+        </details>
 
         <details>
             <summary style="cursor:pointer;color:var(--muted);font-size:.85rem">📦 عرض JSON الخام</summary>
@@ -67,26 +133,23 @@
         </details>
 
         <details>
-            <summary style="cursor:pointer;color:var(--muted);font-size:.85rem">🛠️ إزاي أعمل الـ Worker (مجاني، 5
-                دقايق)</summary>
+            <summary style="cursor:pointer;color:var(--muted);font-size:.85rem">🛠️ إزاي أعمل الـ Worker</summary>
             <ol class="hint" style="padding-inline-start:20px;margin-top:8px">
-                <li>ادخل على حساب Cloudflare (مجاني) واختار Workers &amp; Pages ثم Create.</li>
-                <li>اعمل Worker جديد (Hello World)، وافتح Edit code.</li>
-                <li>امسح الكود اللي موجود والصق محتوى ملف <code>worker.js</code> وبعدين Deploy.</li>
-                <li>انسخ رابط الـ Worker (بينتهي بـ <code>workers.dev</code>) والصقه في الخانة فوق، وهيتحفظ لوحده.</li>
+                <li>Cloudflare → Workers &amp; Pages → Create.</li>
+                <li>Worker جديد → Edit code → الصق الكود → Deploy.</li>
+                <li>انسخ الرابط (بينتهي بـ <code>workers.dev</code>) والصقه فوق.</li>
             </ol>
         </details>
 
-        <p class="hint">⚠️ ده API غير رسمي من Yahoo وممكن يتغير أو يتأخر. بيانات الـ Float بتتحدث ببطء، فراجعها من مصدر
-            تاني قبل ما تعتمد عليها.</p>
+        <p class="note">⚠️ التوصية مبنية على Free Float + RVOL + Float Rotation. ده مش نصيحة استثمارية.</p>
     </div>
 
-
-    <script src="assets/js/stock-fetcher.js"></script>
-    <script src="assets/js/dark-mode.js"></script>
-
-
-
+    <!-- order matters: theme → session → analyzer → fetcher → app -->
+    <script src="assets/js/theme.js" defer></script>
+    <script src="assets/js/session-clock.js" defer></script>
+    <script src="assets/js/analyzer.js" defer></script>
+    <script src="assets/js/stock-fetcher.js" defer></script>
+    <script src="assets/js/app.js" defer></script>
 
 </body>
 
