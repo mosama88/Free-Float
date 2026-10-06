@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Stock Fetcher · Yahoo Finance</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+
+    <div class="app narrow">
+        <header class="header-row">
+            <div class="header-left">
+                <h1>📈 Stock Data Fetcher</h1>
+                <p class="sub">اكتب رمز السهم (مثلاً NVDA) والصفحة تجيب السعر والـ Float والـ Volume من Trading View
+                    Finance
+                    وتجهزهم للمحلل.</p>
+            </div>
+
+            <div class="header-right">
+                <nav class="nav-links">
+                    <a class="nav-link active" href="Stock_Fetcher.html">📈 Stock Fetcher</a>
+                    <a class="nav-link" href="Free_Float_Calc.html">🧮 Free Float Calc</a>
+                </nav>
+
+                <div class="theme-toggle" role="group" aria-label="Theme">
+                    <button class="theme-btn" data-theme-set="system" type="button">Auto</button>
+                    <button class="theme-btn" data-theme-set="dark" type="button">🌙 Dark</button>
+                    <button class="theme-btn" data-theme-set="light" type="button">☀️ Light</button>
+                </div>
+            </div>
+        </header>
+
+        <div class="settings">
+            <label for="workerUrl">رابط الـ Worker الخاص بك (مطلوب عشان يجيب الـ Float بثبات)</label>
+            <input type="text" id="workerUrl" placeholder="https://اسم-الـworker.workers.dev" autocomplete="off"
+                spellcheck="false">
+            <p class="hint">من غير Worker الصفحة بتجرب بروكسيات عامة (غالبًا بتفشل وبتجيب السعر بس من غير Float). خطوات
+                عمل الـ Worker في آخر الصفحة.</p>
+        </div>
+
+        <div class="search">
+            <input type="text" id="symbol" placeholder="NVDA" value="NVDA" autocomplete="off"
+                autocapitalize="characters">
+            <button id="fetchBtn" type="button">🔍 جيب البيانات</button>
+        </div>
+
+        <div class="status" id="status">جاهز...</div>
+
+        <div id="ready"></div>
+        <div class="grid" id="cards"></div>
+
+        <details>
+            <summary style="cursor:pointer;color:var(--muted);font-size:.85rem">📦 عرض JSON الخام</summary>
+            <pre id="rawJson"></pre>
+        </details>
+
+        <details>
+            <summary style="cursor:pointer;color:var(--muted);font-size:.85rem">🛠️ إزاي أعمل الـ Worker (مجاني، 5
+                دقايق)</summary>
+            <ol class="hint" style="padding-inline-start:20px;margin-top:8px">
+                <li>ادخل على حساب Cloudflare (مجاني) واختار Workers &amp; Pages ثم Create.</li>
+                <li>اعمل Worker جديد (Hello World)، وافتح Edit code.</li>
+                <li>امسح الكود اللي موجود والصق محتوى ملف <code>worker.js</code> وبعدين Deploy.</li>
+                <li>انسخ رابط الـ Worker (بينتهي بـ <code>workers.dev</code>) والصقه في الخانة فوق، وهيتحفظ لوحده.</li>
+            </ol>
+        </details>
+
+        <p class="hint">⚠️ ده API غير رسمي من Yahoo وممكن يتغير أو يتأخر. بيانات الـ Float بتتحدث ببطء، فراجعها من مصدر
+            تاني قبل ما تعتمد عليها.</p>
+    </div>
+
+
+    <script src="assets/js/stock-fetcher.js"></script>
+    <script src="assets/js/dark-mode.js"></script>
+
+
+
+
+</body>
+
+</html>

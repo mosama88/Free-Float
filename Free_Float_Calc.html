@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>US Stock Analyzer v4 · Free Float + RVOL + Sessions</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap">
+
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+
+  <div class="app">
+    <header class="header-row">
+      <div class="header-left">
+        <h1>🧮 Free Float Calculator</h1>
+        <p class="sub">أدخل Market Cap، السعر، Free Float، Volume، و Avg Volume (من Google Finance) — والصفحة تحسب RVOL و
+          Float Rotation وتقولك السهم كويس ولا متوسط ولا خطر، وأنت في أي جلسة وفاضل قد إيه.</p>
+      </div>
+
+      <div class="header-right">
+        <nav class="nav-links">
+          <a class="nav-link" href="Stock_Fetcher.html">📈 Stock Fetcher</a>
+          <a class="nav-link active" href="Free_Float_Calc.html">🧮 Free Float Calc</a>
+        </nav>
+
+        <div class="theme-toggle" role="group" aria-label="Theme">
+          <button class="theme-btn" data-theme-set="system" type="button">Auto</button>
+          <button class="theme-btn" data-theme-set="dark" type="button">🌙 Dark</button>
+          <button class="theme-btn" data-theme-set="light" type="button">☀️ Light</button>
+        </div>
+      </div>
+    </header>
+
+    <section class="session-bar" aria-live="off">
+      <span class="session-dot" id="sessionDot"></span>
+      <div class="session-info">
+        <div class="session-name" id="sessionName">—</div>
+        <div class="session-time" id="sessionTime">—</div>
+        <div class="session-local" id="sessionLocal"></div>
+      </div>
+      <div class="countdown-wrap">
+        <div class="countdown-label" id="countdownLabel">—</div>
+        <div class="countdown" id="countdown">--:--:--</div>
+      </div>
+      <button class="notif-btn" id="notifBtn" type="button">🔔 فعّل التنبيهات</button>
+    </section>
+
+    <section class="bar" aria-label="حدود التقييم">
+      <label for="low">كويس لو Free Float أقل من <input type="number" id="low" min="0" step="1" value="20"> M</label>
+      <label for="high">خطر لو Free Float أكبر من <input type="number" id="high" min="0" step="1" value="50"> M</label>
+      <span class="hint">الحدود بالمليون سهم. أقل من 20M = float خفيف، أكتر من 50M = float تقيل، وبينهم متوسط. نسبة الـ
+        Float % للمعلومية بس.</span>
+    </section>
+
+    <section class="summary" aria-live="polite">
+      <div class="sum good"><span>كويسة</span><b id="cGood">0</b></div>
+      <div class="sum mid"><span>متوسطة</span><b id="cMid">0</b></div>
+      <div class="sum bad"><span>خطر</span><b id="cBad">0</b></div>
+      <div class="sum warn"><span>راجع الأرقام</span><b id="cWarn">0</b></div>
+    </section>
+
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Market Cap</th>
+            <th>Price ($)</th>
+            <th class="calc">Total Shares (M)</th>
+            <th>Free Float</th>
+            <th class="calc">Locked (M)</th>
+            <th class="calc">Float %</th>
+            <th>Vol (M)</th>
+            <th>Avg Vol (M)</th>
+            <th class="calc">RVOL</th>
+            <th class="calc">Float Rot.</th>
+            <th>التوصية</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+
+    <div class="actions">
+      <button class="btn" id="add" type="button">+ إضافة سهم</button>
+      <button class="btn ghost" id="reset" type="button">مسح الكل</button>
+      <span class="note">Vol و Avg Vol من Google Finance (تحت Key Stats). RVOL = Vol ÷ Avg Vol. Float Rot = Vol ÷ Free
+        Float.</span>
+    </div>
+
+    <div class="legend">
+      <div>Total Shares = <b>Market Cap ÷ Price</b></div>
+      <div>Locked = <b>Total − Free Float</b></div>
+      <div>Float % = <b>Free Float ÷ Total</b></div>
+      <div>RVOL = <b>Vol ÷ Avg Vol (30D)</b></div>
+      <div>Float Rotation = <b>Vol ÷ Free Float</b></div>
+      <div>التوصية الأساسية = <b>حجم Free Float بالمليون سهم</b></div>
+      <div>قواعد السيولة: <b>AvgVol ≥ 0.1M · Price ≥ $5</b></div>
+    </div>
+
+    <details class="holidays">
+      <summary>📅 عطلات السوق الأمريكي <span id="holYear"></span> (اضغط للعرض)</summary>
+      <ul id="holidayList"></ul>
+    </details>
+
+    <p class="note">⚠️ التوصية مبنية على حجم الـ Free Float + RVOL + Float Rotation. الـ Vol أول اليوم بيكون صغير لأنه
+      تراكمي، فـ RVOL بيزيد كل ما اليوم يعدي. الطلب الحقيقي لازم تتأكد منه من الأخبار والـ Catalyst. ده مش نصيحة
+      استثمارية.</p>
+  </div>
+
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/dark-mode.js"></script>
+
+</body>
+
+</html>
