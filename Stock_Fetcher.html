@@ -46,10 +46,15 @@
         </div>
 
         <div class="search">
-            <input type="text" id="symbol" placeholder="NVDA" value="NVDA" autocomplete="off"
+            <input type="text" id="symbol" placeholder="رمز السهم (مثلاً NVDA)" autocomplete="off"
                 autocapitalize="characters">
             <button id="fetchBtn" type="button">🔍 جيب البيانات</button>
+            <button id="clearBtn" type="button" class="ghost"
+                style="background: var(--bg-card); color: var(--err); border: 1px solid var(--border);">🗑️ مسح
+                البيانات</button>
         </div>
+
+
 
         <div class="status" id="status">جاهز...</div>
 

@@ -4,6 +4,7 @@
   const symbolEl = document.getElementById("symbol");
   const workerEl = document.getElementById("workerUrl");
   const btn = document.getElementById("fetchBtn");
+  const clearBtn = document.getElementById("clearBtn"); // زر مسح البيانات
   const statusEl = document.getElementById("status");
   const cardsEl = document.getElementById("cards");
   const readyEl = document.getElementById("ready");
@@ -21,7 +22,7 @@
     },
   ];
   const LOW = 20,
-    HIGH = 50; // حدود الـ Free Float بالمليون سهم (نفس المحلل)
+    HIGH = 50;
 
   function lsGet(k) {
     try {
@@ -35,12 +36,25 @@
       localStorage.setItem(k, v);
     } catch (e) {}
   }
+  function lsRemove(k) {
+    try {
+      localStorage.removeItem(k);
+    } catch (e) {}
+  }
+
+  // استرجاع رابط الـ Worker
   workerEl.value =
     lsGet("sf-worker") ||
     "https://small-disk-18d3stock-proxy.osamaanit.workers.dev";
   workerEl.addEventListener("input", () =>
     lsSet("sf-worker", workerEl.value.trim()),
   );
+
+  // استرجاع آخر رمز سهم تم البحث عنه بدلاً من الفرضية NVDA دائماً
+  const savedSymbol = lsGet("sf-last-symbol");
+  if (savedSymbol) {
+    symbolEl.value = savedSymbol;
+  }
 
   function setStatus(msg, type) {
     statusEl.textContent = msg;
@@ -113,15 +127,9 @@
     return (e && e.message) || "خطأ غير معروف";
   }
 
-  /* ---------- المصدر 1: Worker الخاص بك (Float كامل) ---------- */
   async function viaWorker(symbol) {
     let base = workerEl.value.trim().replace(/\/+$/, "");
     if (!/^https?:\/\//i.test(base)) base = "https://" + base;
-    if (/(^|\/\/|\.)(yahoo|google)\./i.test(base)) {
-      throw new Error(
-        "الخانة دي لرابط الـ Worker بتاعك (بينتهي بـ workers.dev) مش رابط صفحة Yahoo. اعمل الـ Worker من الخطوات تحت، أو سيب الخانة فاضية.",
-      );
-    }
     let res;
     try {
       res = await timedFetch(
@@ -129,7 +137,7 @@
         12000,
       );
     } catch (e) {
-      throw new Error("الـ Worker: " + reason(e) + " (راجع الرابط)");
+      throw new Error("الـ Worker: " + reason(e));
     }
     let body = null;
     try {
@@ -147,7 +155,6 @@
     };
   }
 
-  /* ---------- المصدر 2: بروكسيات عامة (سعر وفوليوم بس) ---------- */
   async function viaProxies(symbol) {
     const url =
       "https://query1.finance.yahoo.com/v8/finance/chart/" +
@@ -159,27 +166,14 @@
         const res = await timedFetch(p.build(url), 8000);
         if (!res.ok) throw new Error("HTTP " + res.status);
         const text = await res.text();
-        let json;
-        try {
-          json = JSON.parse(text);
-        } catch (e) {
-          throw new Error("الرد مش JSON");
-        }
-        const r =
-          json && json.chart && json.chart.result && json.chart.result[0];
+        let json = JSON.parse(text);
+        const r = json?.chart?.result?.[0];
         if (!r || !r.meta || !r.meta.symbol) {
-          throw new Error(
-            (json &&
-              json.chart &&
-              json.chart.error &&
-              json.chart.error.description) ||
-              "السهم غير موجود",
-          );
+          throw new Error("السهم غير موجود");
         }
         const m = r.meta;
         const price = getNumber(m.regularMarketPrice);
-        const prev =
-          getNumber(m.chartPreviousClose) ?? getNumber(m.previousClose);
+        const prev = getNumber(m.chartPreviousClose) ?? getNumber(m.previousClose);
         const change = price !== null && prev !== null ? price - prev : null;
         return {
           source: "بروكسي عام (" + p.name + ") — بدون Float",
@@ -210,24 +204,14 @@
         problems.push(p.name + " ← " + reason(e));
       }
     }
-    const err = new Error("البروكسيات العامة فشلت: " + problems.join(" · "));
-    err.problems = problems;
-    throw err;
+    throw new Error("البروكسيات العامة فشلت: " + problems.join(" · "));
   }
 
   async function getStock(symbol) {
     if (workerEl.value.trim()) return viaWorker(symbol);
-    try {
-      return await viaProxies(symbol);
-    } catch (e) {
-      throw new Error(
-        e.message +
-          " — الحل: ابنِ الـ Worker (الخطوات تحت) والصق رابطه في الخانة فوق.",
-      );
-    }
+    return await viaProxies(symbol);
   }
 
-  /* ---------- عرض ---------- */
   function readyBlock(d) {
     const ffM = isNum(d.floatShares) ? d.floatShares / 1e6 : null;
     const volM = isNum(d.volume) ? d.volume / 1e6 : null;
@@ -246,10 +230,7 @@
     let cls = "muted";
     if (ffM !== null) {
       if (ffM <= LOW) {
-        verdict =
-          "Float خفيف (" +
-          ffM.toFixed(2) +
-          "M) — صفقة كويسة من ناحية الـ float";
+        verdict = "Float خفيف (" + ffM.toFixed(2) + "M) — صفقة كويسة من ناحية الـ float";
         cls = "good";
       } else if (ffM <= HIGH) {
         verdict = "Float متوسط (" + ffM.toFixed(2) + "M) — صفقة متوسطة";
@@ -274,19 +255,9 @@
 
     readyEl.innerHTML =
       '<div class="ready"><h2>جاهز للمحلل</h2>' +
-      '<div class="line">' +
-      esc(line) +
-      "</div>" +
-      '<div class="line">RVOL ' +
-      (rvol !== null ? rvol.toFixed(2) + "x" : "—") +
-      " | Float Rot " +
-      (rot !== null ? rot.toFixed(2) + "x" : "—") +
-      "</div>" +
-      '<div class="verdict ' +
-      cls +
-      '">' +
-      esc(verdict) +
-      "</div>" +
+      '<div class="line">' + esc(line) + '</div>' +
+      '<div class="line">RVOL ' + (rvol !== null ? rvol.toFixed(2) + "x" : "—") + " | Float Rot " + (rot !== null ? rot.toFixed(2) + "x" : "—") + '</div>' +
+      '<div class="verdict ' + cls + '">' + esc(verdict) + '</div>' +
       '<div><button class="ghost" id="copyBtn" type="button">نسخ الأرقام</button></div></div>';
 
     const cb = document.getElementById("copyBtn");
@@ -305,21 +276,9 @@
     let html = "";
     html += card("Symbol", d.symbol);
     html += card("Name", d.name);
-    html += card(
-      "Price",
-      isNum(d.price) ? fmtNum(d.price) + " " + d.currency : null,
-      "good",
-    );
-    html += card(
-      "Change",
-      fmtNum(d.change),
-      up === null ? "muted" : up ? "good" : "bad",
-    );
-    html += card(
-      "Change %",
-      isNum(d.changePct) ? fmtNum(d.changePct) + "%" : null,
-      up === null ? "muted" : up ? "good" : "bad",
-    );
+    html += card("Price", isNum(d.price) ? fmtNum(d.price) + " " + d.currency : null, "good");
+    html += card("Change", fmtNum(d.change), up === null ? "muted" : up ? "good" : "bad");
+    html += card("Change %", isNum(d.changePct) ? fmtNum(d.changePct) + "%" : null, up === null ? "muted" : up ? "good" : "bad");
     html += card("Previous Close", fmtNum(d.previousClose));
     html += card("Day High", fmtNum(d.dayHigh));
     html += card("Day Low", fmtNum(d.dayLow));
@@ -342,6 +301,10 @@
       setStatus("اكتب رمز السهم الأول", "err");
       return;
     }
+
+    // حفظ رمز السهم الحالي
+    lsSet("sf-last-symbol", sym);
+
     btn.disabled = true;
     setStatus("⏳ بيجيب أحدث البيانات...", "");
     cardsEl.innerHTML = "";
@@ -359,9 +322,27 @@
     }
   }
 
+  // دالة مسح البيانات
+  function clearAllData() {
+    symbolEl.value = "";
+    cardsEl.innerHTML = "";
+    readyEl.innerHTML = "";
+    rawEl.textContent = "";
+    lsRemove("sf-last-symbol");
+    setStatus("تم مسح البيانات بنجاح", "");
+  }
+
   btn.addEventListener("click", doFetch);
+  if (clearBtn) clearBtn.addEventListener("click", clearAllData);
+
   symbolEl.addEventListener("keydown", (e) => {
     if (e.key === "Enter") doFetch();
   });
-  doFetch();
+
+  // تشغيل البحث التلقائي فقط إذا كان هناك سهم محفوظ مسبقاً
+  if (symbolEl.value.trim()) {
+    doFetch();
+  } else {
+    setStatus("جاهز...", "");
+  }
 })();
