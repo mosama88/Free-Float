@@ -1,5 +1,6 @@
 /* ============================================================
    analyzer.js — Free Float Calculator Table
+   + Auto-Add + Update + Refresh All + Export CSV
 ============================================================ */
 (function () {
   "use strict";
@@ -274,7 +275,7 @@
     state.rows = [{}]; render(); save();
   });
 
-  /* ---------- PUBLIC API ---------- */
+  /* ---------- PUBLIC API: add / update ---------- */
   window.analyzerAddSymbol = function (d) {
     var r = {
       symbol: d.symbol,
@@ -287,13 +288,38 @@
       avgVol: d.avgVolume3M != null ? +(d.avgVolume3M / 1e6).toFixed(2) : null
     };
 
-    var firstEmpty = state.rows.findIndex(function (x) {
-      return !x.symbol && x.mc == null && x.p == null && x.ff == null;
+    // 1) لو فيه صف بنفس الرمز → حدّثه
+    var sameIdx = state.rows.findIndex(function (x) {
+      return x.symbol && x.symbol === r.symbol;
     });
-    if (firstEmpty >= 0) state.rows[firstEmpty] = r;
-    else state.rows.push(r);
+    if (sameIdx >= 0) {
+      state.rows[sameIdx] = Object.assign({}, state.rows[sameIdx], r);
+      render(); save();
+      return { action: 'updated', index: sameIdx };
+    }
 
+    // 2) لو فيه صف فاضي تمامًا → استخدمه
+    var emptyIdx = state.rows.findIndex(function (x) {
+      return !x.symbol && x.mc == null && x.p == null && x.ff == null &&
+             x.vol == null && x.avgVol == null;
+    });
+    if (emptyIdx >= 0) {
+      state.rows[emptyIdx] = r;
+      render(); save();
+      return { action: 'filled-empty', index: emptyIdx };
+    }
+
+    // 3) وإلا ضيف صف جديد
+    state.rows.push(r);
     render(); save();
+    return { action: 'added', index: state.rows.length - 1 };
+  };
+
+  /* ---------- PUBLIC API: refresh all (يستخدمها app.js) ---------- */
+  window.analyzerGetSymbols = function () {
+    return state.rows
+      .map(function (r) { return r.symbol; })
+      .filter(Boolean);
   };
 
   /* ---------- EXPORT CSV ---------- */
@@ -322,6 +348,11 @@
     a.href = url; a.download = 'scanner.csv'; a.click();
     URL.revokeObjectURL(url);
   });
+
+  // تأكد إن فيه صف فاضي واحد على الأقل
+  (function ensureEmptyRow() {
+    if (!state.rows.length) state.rows.push({});
+  })();
 
   render();
 })();
