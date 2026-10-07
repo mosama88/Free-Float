@@ -9,6 +9,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 
@@ -78,7 +82,8 @@
         </section>
 
         <section class="bar capital-bar" aria-label="رأس المال وحجم الصفقة">
-            <label for="capital">رأس المال ($) <input type="number" id="capital" min="0" step="any" value="100" inputmode="decimal"></label>
+            <label for="capital">رأس المال ($) <input type="number" id="capital" min="0" step="any" value="100"
+                    inputmode="decimal"></label>
             <label class="check" for="fractional"><input type="checkbox" id="fractional"> أسهم كسرية</label>
             <span class="cap-summary" id="capSummary" aria-live="polite">—</span>
         </section>
@@ -159,6 +164,122 @@
         </section>
 
 
+
+
+        <!-- ================= SCANNER ================= -->
+        <section class="scanner-section">
+            <div class="scanner-header">
+                <h2>🔍 Global Scanner</h2>
+                <div class="scanner-controls">
+                    <label class="scanner-toggle">
+                        <input type="checkbox" id="scannerAuto" checked>
+                        تحديث تلقائي كل 5 ثواني
+                    </label>
+                    <span id="scannerCount">0</span>
+                    <span>·</span>
+                    <span id="scannerLastUpdate">—</span>
+                    <span class="scanner-status" id="scannerStatus">جاهز</span>
+                </div>
+            </div>
+
+            <div class="scanner-filters">
+                <div class="filter-item">
+                    <label>السعر من ($)</label>
+                    <input type="number" id="filterPriceMin" value="1" step="0.01" min="0">
+                </div>
+                <div class="filter-item">
+                    <label>السعر إلى ($)</label>
+                    <input type="number" id="filterPriceMax" value="100" step="0.01" min="0">
+                </div>
+                <div class="filter-item">
+                    <label>Volume ≥</label>
+                    <input type="number" id="filterVolumeMin" value="500000" step="10000" min="0">
+                </div>
+                <div class="filter-item">
+                    <label>Market Cap ≥ ($)</label>
+                    <input type="number" id="filterMarketCapMin" value="10000000" step="1000000" min="0">
+                </div>
+                <div class="filter-item">
+                    <label>Change % ≥</label>
+                    <input type="number" id="filterChangeMin" value="3" step="0.1">
+                </div>
+                <div class="filter-item">
+                    <label>RVOL ≥</label>
+                    <input type="number" id="filterRvolMin" value="1.5" step="0.1" min="0">
+                </div>
+                <div class="filter-item">
+                    <label>السوق</label>
+                    <select id="filterMarket">
+                        <option value="all">كل الأسواق</option>
+                        <option value="nasdaq">NASDAQ</option>
+                        <option value="nyse">NYSE</option>
+                        <option value="amex">AMEX</option>
+                    </select>
+                </div>
+                <div class="filter-item">
+                    <label>ترتيب حسب</label>
+                    <select id="filterSort">
+                        <option value="volume">Volume</option>
+                        <option value="change">Change %</option>
+                        <option value="rvol">RVOL</option>
+                        <option value="marketCap">Market Cap</option>
+                    </select>
+                </div>
+                <div class="filter-item">
+                    <label>التوصية</label>
+                    <select id="filterVerdict">
+                        <option value="">الكل</option>
+                        <option value="enter">🚀 ادخل فورًا</option>
+                        <option value="watch">👀 مراقبة</option>
+                        <option value="wait">⏸️ انتظر</option>
+                        <option value="unstable">⚡ غير مستقر</option>
+                        <option value="danger">🛑 خطر</option>
+                    </select>
+                </div>
+                <div class="filter-item">
+                    <label>عدد النتائج</label>
+                    <select id="filterLimit">
+                        <option value="25">25</option>
+                        <option value="50" selected>50</option>
+                        <option value="100">100</option>
+                        <option value="200">200</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="scanner-actions">
+                <button class="btn" id="scannerBtn" type="button">🔍 ابحث الآن</button>
+                <button class="btn ghost" id="scannerStop" type="button">⏸️ إيقاف التلقائي</button>
+                <button class="btn ghost" id="scannerReset" type="button">↺ إعادة ضبط الفلاتر</button>
+            </div>
+
+            <div class="scanner-table-wrap">
+                <table class="scanner-table">
+                    <thead>
+                        <tr>
+                            <th>Symbol</th>
+                            <th>Market</th>
+                            <th>Price</th>
+                            <th>Chg %</th>
+                            <th>Volume</th>
+                            <th>Rel Vol (10D)</th>
+                            <th>Market Cap</th>
+                            <th>Float</th>
+                            <th>RVOL</th>
+                            <th>التوصية</th>
+                            <th>TP1 / TP2 / SL</th>
+                        </tr>
+                    </thead>
+                    <tbody id="scannerRows">
+                        <tr>
+                            <td colspan="11" class="empty-row">جاري التحميل...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+
         <details class="holidays">
             <summary>📅 عطلات السوق الأمريكي <span id="holYear"></span> (اضغط للعرض)</summary>
             <ul id="holidayList"></ul>
@@ -181,6 +302,11 @@
         <p class="note">⚠️ التوصية مبنية على Free Float + RVOL + Float Rotation. ده مش نصيحة استثمارية.</p>
     </div>
 
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+
     <!-- order matters: theme → session → analyzer → fetcher → app -->
     <script src="assets/js/theme.js" defer></script>
     <script src="assets/js/session-clock.js" defer></script>
@@ -189,6 +315,8 @@
     <script src="assets/js/app.js" defer></script>
     <script src="assets/js/bid-ask.js" defer></script>
     <script src="assets/js/position-size.js" defer></script>
+    <script src="assets/js/scanner.js" defer></script>
+
 
 </body>
 
