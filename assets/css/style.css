@@ -795,3 +795,21 @@ pre {
 @media (prefers-reduced-motion: reduce) {
   * { animation: none !important; transition: none !important; }
 }
+/* ============================================================
+   POSITION SIZE (رأس المال وعدد الأسهم)
+============================================================ */
+.capital-bar input#capital { width: 110px; }
+.capital-bar .check { cursor: pointer; }
+.capital-bar input[type="checkbox"] { width: auto; accent-color: var(--accent); }
+.cap-summary {
+  flex: 1 1 320px;
+  min-width: 0;
+  font-size: 0.85rem;
+  line-height: 1.7;
+  color: var(--muted);
+}
+.cap-summary b { color: var(--fg); font-family: var(--mono); font-weight: 600; }
+
+.shares-cell b { font-family: var(--mono); font-size: 1.05rem; font-weight: 700; display: block; }
+.shares-cell small { display: block; color: var(--muted); font-size: 0.68rem; margin-top: 2px; white-space: normal; }
+td.shares { min-width: 130px; }

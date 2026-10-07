@@ -24,6 +24,27 @@
   ];
   var LOW = 20, HIGH = 50;
 
+  /* ---------- رأس المال → عدد الأسهم ---------- */
+  var capEl = document.getElementById('capital');
+  var fracEl = document.getElementById('fractional');
+
+  // بيرجع null لو رأس المال أو السعر غير صالح
+  function sharesFor(price) {
+    if (!capEl || capEl.value === '') return null;
+    var cap = Number(capEl.value);
+    if (!isFinite(cap) || cap < 0 || !isNum(price) || Number(price) <= 0) return null;
+    price = Number(price);
+    var frac = !!(fracEl && fracEl.checked);
+    var n = frac
+      ? Math.floor((cap / price) * 10000 + 1e-6) / 10000
+      : Math.floor(cap / price + 1e-9);
+    var cost = n * price;
+    return { capital: cap, shares: n, cost: cost, left: cap - cost, frac: frac };
+  }
+  function sharesStr(sh) {
+    return sh.frac ? sh.shares.toFixed(4) : String(sh.shares);
+  }
+
   /* ---------- helpers ---------- */
   function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
@@ -323,10 +344,20 @@
       ' | Vol ' + (volM !== null ? volM.toFixed(2) + ' M' : '—') +
       ' | Avg Vol ' + (avgM !== null ? avgM.toFixed(2) + ' M' : '—');
 
+    var sh = sharesFor(d.price);
+    var shLine = sh
+      ? 'Shares to buy ' + sharesStr(sh) + ' | Cost $' + sh.cost.toFixed(2) +
+        ' | Left $' + sh.left.toFixed(2) + ' | Capital $' + sh.capital.toFixed(2)
+      : 'Shares to buy — (اكتب رأس المال)';
+    var shNote = (sh && sh.shares <= 0)
+      ? '<div class="verdict warn">رأس المال أقل من سعر سهم واحد — فعّل "أسهم كسرية" لو وسيطك بيدعمها</div>'
+      : '';
+
     readyEl.innerHTML = '<div class="ready"><h2>جاهز للمحلل</h2>' +
       '<div class="line">' + esc(line) + '</div>' +
       '<div class="line">RVOL ' + (rvol !== null ? rvol.toFixed(2) + 'x' : '—') +
       ' | Float Rot ' + (rot !== null ? rot.toFixed(2) + 'x' : '—') + '</div>' +
+      '<div class="line">' + esc(shLine) + '</div>' + shNote +
       '<div class="verdict ' + cls + '">' + esc(verdict) + '</div></div>';
   }
 
@@ -348,6 +379,8 @@
     html += card('Market Cap', fmtBig(d.marketCap));
     html += card('Shares Float', fmtBig(d.floatShares));
     html += card('Shares Outstanding', fmtBig(d.sharesOutstanding));
+    var shc = sharesFor(d.price);
+    html += card('Shares to Buy', shc ? sharesStr(shc) : null, shc ? (shc.shares > 0 ? 'good' : 'bad') : 'muted');
     html += card('Market State', d.marketState);
     html += card('Exchange', d.exchange);
     html += card('52W High', fmtNum(d.fiftyTwoHigh));
@@ -422,6 +455,11 @@
       setStatus(addResultMessage(lastData.symbol, res, 'تحديث يدوي'), 'ok');
     }
   });
+
+  // تغيير رأس المال أو خيار الأسهم الكسرية يحدّث السهم المعروض من غير جلب جديد
+  function rerender() { if (lastData) render(lastData); }
+  if (capEl) capEl.addEventListener('input', rerender);
+  if (fracEl) fracEl.addEventListener('change', rerender);
 
   if (symbolEl.value.trim()) doFetch();
   else setStatus('جاهز...', '');

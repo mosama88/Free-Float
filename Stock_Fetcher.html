@@ -77,6 +77,12 @@
             <span class="hint">الحدود بالمليون سهم. أقل من 20M = float خفيف، أكتر من 50M = float تقيل.</span>
         </section>
 
+        <section class="bar capital-bar" aria-label="رأس المال وحجم الصفقة">
+            <label for="capital">رأس المال ($) <input type="number" id="capital" min="0" step="any" value="100" inputmode="decimal"></label>
+            <label class="check" for="fractional"><input type="checkbox" id="fractional"> أسهم كسرية</label>
+            <span class="cap-summary" id="capSummary" aria-live="polite">—</span>
+        </section>
+
         <section class="summary" aria-live="polite">
             <div class="sum good"><span>كويسة</span><b id="cGood">0</b></div>
             <div class="sum mid"><span>متوسطة</span><b id="cMid">0</b></div>
@@ -99,6 +105,7 @@
                         <th>Avg Vol (M)</th>
                         <th class="calc">RVOL</th>
                         <th class="calc">Float Rot.</th>
+                        <th class="calc">عدد الأسهم</th>
                         <th>التوصية</th>
                         <th></th>
                     </tr>
@@ -120,6 +127,7 @@
             <div>RVOL = <b>Vol ÷ Avg Vol</b></div>
             <div>Float Rotation = <b>Vol ÷ Free Float</b></div>
             <div>التوصية = <b>حجم Free Float بالمليون سهم</b></div>
+            <div>عدد الأسهم = <b>Capital ÷ Price</b> (أقرب رقم صحيح لتحت)</div>
         </div>
 
 
@@ -180,6 +188,7 @@
     <script src="assets/js/stock-fetcher.js" defer></script>
     <script src="assets/js/app.js" defer></script>
     <script src="assets/js/bid-ask.js" defer></script>
+    <script src="assets/js/position-size.js" defer></script>
 
 </body>
 
