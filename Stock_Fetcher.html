@@ -165,15 +165,17 @@
 
 
 
-
-        <!-- ================= SCANNER ================= -->
         <section class="scanner-section">
             <div class="scanner-header">
-                <h2>🔍 Global Scanner</h2>
+                <h2>🔍 Global Scanner Pro</h2>
                 <div class="scanner-controls">
                     <label class="scanner-toggle">
                         <input type="checkbox" id="scannerAuto" checked>
-                        تحديث تلقائي كل 5 ثواني
+                        تحديث كل 5s
+                    </label>
+                    <label class="scanner-toggle">
+                        <input type="checkbox" id="scannerSound" checked>
+                        🔔 صوت
                     </label>
                     <span id="scannerCount">0</span>
                     <span>·</span>
@@ -184,11 +186,11 @@
 
             <div class="scanner-filters">
                 <div class="filter-item">
-                    <label>السعر من ($)</label>
+                    <label>السعر من</label>
                     <input type="number" id="filterPriceMin" value="1" step="0.01" min="0">
                 </div>
                 <div class="filter-item">
-                    <label>السعر إلى ($)</label>
+                    <label>السعر إلى</label>
                     <input type="number" id="filterPriceMax" value="100" step="0.01" min="0">
                 </div>
                 <div class="filter-item">
@@ -196,7 +198,7 @@
                     <input type="number" id="filterVolumeMin" value="500000" step="10000" min="0">
                 </div>
                 <div class="filter-item">
-                    <label>Market Cap ≥ ($)</label>
+                    <label>Market Cap ≥</label>
                     <input type="number" id="filterMarketCapMin" value="10000000" step="1000000" min="0">
                 </div>
                 <div class="filter-item">
@@ -217,7 +219,7 @@
                     </select>
                 </div>
                 <div class="filter-item">
-                    <label>ترتيب حسب</label>
+                    <label>ترتيب</label>
                     <select id="filterSort">
                         <option value="volume">Volume</option>
                         <option value="change">Change %</option>
@@ -232,12 +234,13 @@
                         <option value="enter">🚀 ادخل فورًا</option>
                         <option value="watch">👀 مراقبة</option>
                         <option value="wait">⏸️ انتظر</option>
+                        <option value="weak">💤 ضعيف</option>
                         <option value="unstable">⚡ غير مستقر</option>
                         <option value="danger">🛑 خطر</option>
                     </select>
                 </div>
                 <div class="filter-item">
-                    <label>عدد النتائج</label>
+                    <label>حد النتائج</label>
                     <select id="filterLimit">
                         <option value="25">25</option>
                         <option value="50" selected>50</option>
@@ -250,29 +253,33 @@
             <div class="scanner-actions">
                 <button class="btn" id="scannerBtn" type="button">🔍 ابحث الآن</button>
                 <button class="btn ghost" id="scannerStop" type="button">⏸️ إيقاف التلقائي</button>
-                <button class="btn ghost" id="scannerReset" type="button">↺ إعادة ضبط الفلاتر</button>
+                <button class="btn ghost" id="scannerReset" type="button">↺ إعادة ضبط</button>
             </div>
+
+            <div class="scanner-top-movers" id="scannerTopMovers"></div>
 
             <div class="scanner-table-wrap">
                 <table class="scanner-table">
                     <thead>
                         <tr>
                             <th>Symbol</th>
-                            <th>Market</th>
                             <th>Price</th>
                             <th>Chg %</th>
                             <th>Volume</th>
-                            <th>Rel Vol (10D)</th>
-                            <th>Market Cap</th>
-                            <th>Float</th>
+                            <th>Rel Vol</th>
                             <th>RVOL</th>
+                            <th>MCap</th>
+                            <th>Float</th>
+                            <th>Float %</th>
+                            <th>W52 %</th>
+                            <th>MOMO</th>
                             <th>التوصية</th>
                             <th>TP1 / TP2 / SL</th>
                         </tr>
                     </thead>
                     <tbody id="scannerRows">
                         <tr>
-                            <td colspan="11" class="empty-row">جاري التحميل...</td>
+                            <td colspan="13" class="empty-row">جاري التحميل...</td>
                         </tr>
                     </tbody>
                 </table>
