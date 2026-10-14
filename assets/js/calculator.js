@@ -21,23 +21,37 @@ const sg = (x, d = 2) => (x > 0 ? '+' : '') + fNum(x, d);
 function calc() {
   const msg = $('msg'), res = $('res'), sc = $('scen');
   msg.textContent = ''; res.innerHTML = ''; sc.hidden = true;
-  const p = numVal('buy'), s = numVal('sell'), fb = numVal('fbf') || 0, pb = numVal('fbp') || 0, fs = numVal('fsf') || 0, ps = numVal('fsp') || 0, frac = $('frac').checked;
+  
+  // تم إلغاء قراءة frac لأننا سنجبر العدد على أن يكون صحيحاً
+  const p = numVal('buy'), s = numVal('sell'), fb = numVal('fbf') || 0, pb = numVal('fbp') || 0, fs = numVal('fsf') || 0, ps = numVal('fsp') || 0;
+  
   if (!(p > 0)) { msg.textContent = 'اكتب سعر الشراء أو اضغط على سهم من الاسكانر.'; return }
+  
+  // حساب عدد الأسهم
   let sh = $('mode').value === 'budget' ? (numVal('budget') - fb) / (p * (1 + pb / 100)) : numVal('shares');
   if (!isFinite(sh)) sh = 0;
-  if (!frac) sh = Math.floor(sh); else sh = Math.floor(sh * 1e4) / 1e4;
+  
+  // إجبار العدد على أن يكون صحيحاً دائماً
+  sh = Math.floor(sh);
+  
   if (!(sh > 0)) { msg.textContent = 'المبلغ غير كافٍ لشراء سهم واحد بعد العمولة.'; return }
+  
   const val = sh * p, cb = fb + val * pb / 100, inn = val + cb;
   const out = (sp) => { const rev = sh * sp, cs = fs + rev * ps / 100, net = rev - cs - inn; return { rev, cs, net, pct: net / inn * 100 } };
   const be = (inn + fs) / (sh * (1 - ps / 100));
   const dec = p < 1 ? 4 : 2;
 
-  const box = (l, v, c) => `<div class="col-6 col-md-4 col-lg-3"><div class="p-2 rounded bg-body-tertiary border h-100"><small class="text-body-secondary d-block">${l}</small><b class="fs-6 ${c || ''}" dir="ltr">${v}</b></div></div>`;
-  let h = box('عدد الأسهم', fNum(sh, frac ? 4 : 0))
+  // تعديل دالة box لتقبل كلاس خلفية إضافي
+  const box = (l, v, c, bgClass = '') => `<div class="col-6 col-md-4 col-lg-3"><div class="p-2 rounded ${bgClass || 'bg-body-tertiary'} border h-100"><small class="text-body-secondary d-block">${l}</small><b class="fs-6 ${c || ''}" dir="ltr">${v}</b></div></div>`;
+  
+  // تم إضافة خلفية success لخانة عدد الأسهم فقط
+  let h = box('عدد الأسهم', fNum(sh, 0), '', 'bg-success text-white')
     + box('قيمة الشراء', '$' + fNum(val, 2))
     + box('إجمالي التكلفة بالعمولة', '$' + fNum(inn, 2))
     + box('سعر التعادل (Break-even)', '$' + fNum(be, 4));
+    
   if ($('mode').value === 'budget') h += box('المتبقي من المبلغ', '$' + fNum(numVal('budget') - inn, 2));
+  
   if (s > 0) {
     const r = out(s);
     h += box('إجمالي البيع', '$' + fNum(r.rev, 2))
