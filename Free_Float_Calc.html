@@ -1,881 +1,1470 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
-
+<html lang="ar" dir="rtl" data-bs-theme="dark">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <title>مواعيد البورصات بتوقيت مصر + حاسبة الأرباح</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap">
-  <style>
-    :root {
-      --bg: #f2f5f7;
-      --card: #fff;
-      --ink: #14202b;
-      --mute: #5b6b78;
-      --line: #d9e1e7;
-      --acc: #0b6b78;
-      --pre: #b7791f;
-      --reg: #16803c;
-      --post: #6d3fc4;
-      --off: #8795a1;
-      --up: #16803c;
-      --dn: #c0392b;
-      --soft: #eaf0f3
-    }
-
-    @media(prefers-color-scheme:dark) {
-      :root {
-        --bg: #10171d;
-        --card: #18222a;
-        --ink: #e6edf2;
-        --mute: #9db0bd;
-        --line: #2a3945;
-        --acc: #4fc3d1;
-        --pre: #e0a73a;
-        --reg: #43c06d;
-        --post: #a98af0;
-        --off: #6f8191;
-        --up: #43c06d;
-        --dn: #ef7a6c;
-        --soft: #1f2d37
-      }
-    }
-
-    * {
-      box-sizing: border-box
-    }
-
-    html {
-      padding-top: env(safe-area-inset-top, 0px);
-      padding-bottom: env(safe-area-inset-bottom, 0px)
-    }
-
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--ink);
-      font: 400 16px/1.7 "IBM Plex Sans Arabic", system-ui, sans-serif;
-      font-variant-numeric: tabular-nums
-    }
-
-    .app {
-      max-width: 1060px;
-      margin: 0 auto;
-      padding: 16px
-    }
-
-    h1 {
-      font-size: 1.5rem;
-      margin: 0
-    }
-
-    h2 {
-      font-size: 1.2rem;
-      margin: 0 0 10px
-    }
-
-    .top {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 14px
-    }
-
-    .top p {
-      margin: 4px 0 0;
-      color: var(--mute);
-      max-width: 60ch
-    }
-
-    nav a {
-      color: var(--acc);
-      text-decoration: none;
-      font-weight: 600;
-      margin-inline-start: 14px
-    }
-
-    nav a:focus-visible,
-    button:focus-visible,
-    input:focus-visible,
-    summary:focus-visible {
-      outline: 3px solid var(--acc);
-      outline-offset: 2px
-    }
-
-    section {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      padding: 16px;
-      margin-bottom: 14px
-    }
-
-    .hero {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
-      border-inline-start: 6px solid var(--off)
-    }
-
-    .hero.pre {
-      border-color: var(--pre)
-    }
-
-    .hero.reg {
-      border-color: var(--reg)
-    }
-
-    .hero.post {
-      border-color: var(--post)
-    }
-
-    @media(max-width:700px) {
-      .hero {
-        grid-template-columns: 1fr
-      }
-    }
-
-    .big {
-      font-size: 3rem;
-      font-weight: 700;
-      line-height: 1.1;
-      direction: ltr;
-      text-align: right
-    }
-
-    .mute {
-      color: var(--mute);
-      font-size: .9rem
-    }
-
-    .stname {
-      font-size: 1.35rem;
-      font-weight: 700;
-      display: flex;
-      gap: 8px;
-      align-items: center
-    }
-
-    .dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: var(--off);
-      flex: none
-    }
-
-    .pre .dot {
-      background: var(--pre)
-    }
-
-    .reg .dot {
-      background: var(--reg)
-    }
-
-    .post .dot {
-      background: var(--post)
-    }
-
-    .reg .dot {
-      animation: pulse 1.6s infinite
-    }
-
-    @keyframes pulse {
-      50% {
-        opacity: .35
-      }
-    }
-
-    @media(prefers-reduced-motion:reduce) {
-      .reg .dot {
-        animation: none
-      }
-    }
-
-    .cd {
-      font-size: 1.6rem;
-      font-weight: 600;
-      direction: ltr;
-      text-align: right
-    }
-
-    .tl {
-      position: relative;
-      height: 38px;
-      background: var(--soft);
-      border-radius: 6px;
-      direction: ltr;
-      overflow: hidden
-    }
-
-    .tl i {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      display: block
-    }
-
-    .tl .pre {
-      background: var(--pre)
-    }
-
-    .tl .reg {
-      background: var(--reg)
-    }
-
-    .tl .post {
-      background: var(--post)
-    }
-
-    .tl b {
-      position: absolute;
-      top: -2px;
-      bottom: -2px;
-      width: 3px;
-      background: var(--ink)
-    }
-
-    .ticks {
-      display: flex;
-      justify-content: space-between;
-      direction: ltr;
-      font-size: .8rem;
-      color: var(--mute);
-      margin-top: 4px
-    }
-
-    .lg {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-      margin-top: 8px;
-      font-size: .9rem
-    }
-
-    .lg span:before {
-      content: "";
-      display: inline-block;
-      width: 12px;
-      height: 12px;
-      border-radius: 3px;
-      margin-inline-end: 6px;
-      vertical-align: -1px;
-      background: var(--c)
-    }
-
-    .tw {
-      overflow-x: auto
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 520px
-    }
-
-    th,
-    td {
-      padding: 8px 10px;
-      text-align: start;
-      border-bottom: 1px solid var(--line)
-    }
-
-    th {
-      font-size: .85rem;
-      color: var(--mute);
-      font-weight: 600
-    }
-
-    .pill {
-      display: inline-block;
-      padding: 1px 10px;
-      border-radius: 99px;
-      font-size: .85rem;
-      font-weight: 600;
-      color: #fff;
-      background: var(--off)
-    }
-
-    .pill.on {
-      background: var(--reg)
-    }
-
-    .pill.pre {
-      background: var(--pre)
-    }
-
-    .pill.post {
-      background: var(--post)
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 12px
-    }
-
-    .cell {
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 12px
-    }
-
-    .cell h3 {
-      margin: 0 0 4px;
-      font-size: 1rem
-    }
-
-    .cell p {
-      margin: 0;
-      font-size: .92rem;
-      color: var(--mute)
-    }
-
-    .cell.hot {
-      border-color: var(--reg)
-    }
-
-    .cell.risk {
-      border-color: var(--dn)
-    }
-
-    .f {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 10px;
-      margin-bottom: 10px
-    }
-
-    label {
-      display: block;
-      font-size: .88rem;
-      color: var(--mute);
-      font-weight: 500
-    }
-
-    input[type=text],
-    input[type=number] {
-      width: 100%;
-      padding: 8px 10px;
-      border: 1px solid var(--line);
-      border-radius: 6px;
-      background: var(--bg);
-      color: var(--ink);
-      font: inherit;
-      direction: ltr;
-      text-align: right
-    }
-
-    button {
-      font: inherit;
-      cursor: pointer;
-      border: 1px solid var(--acc);
-      background: var(--acc);
-      color: #fff;
-      border-radius: 6px;
-      padding: 8px 16px;
-      font-weight: 600
-    }
-
-    button.g {
-      background: transparent;
-      color: var(--acc);
-      padding: 4px 12px
-    }
-
-    button[disabled] {
-      opacity: .6;
-      cursor: wait
-    }
-
-    .row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-      margin-bottom: 10px
-    }
-
-    .res {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 8px;
-      margin: 12px 0
-    }
-
-    .res div {
-      background: var(--soft);
-      border-radius: 8px;
-      padding: 8px 12px
-    }
-
-    .res small {
-      display: block;
-      color: var(--mute)
-    }
-
-    .res b {
-      font-size: 1.15rem
-    }
-
-    .up {
-      color: var(--up)
-    }
-
-    .dn {
-      color: var(--dn)
-    }
-
-    .q {
-      background: var(--soft);
-      border-radius: 8px;
-      padding: 10px 12px;
-      margin-bottom: 10px;
-      display: none
-    }
-
-    .q.show {
-      display: block
-    }
-
-    details {
-      border-bottom: 1px solid var(--line);
-      padding: 8px 0
-    }
-
-    summary {
-      cursor: pointer;
-      font-weight: 600
-    }
-
-    details p,
-    details ul {
-      margin: 6px 0;
-      color: var(--mute)
-    }
-
-    .warn {
-      font-size: .88rem;
-      color: var(--mute)
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>مواعيد البورصات + حاسبة الأرباح + ماسح الأسهم الفوري</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap">
+<!-- Bootstrap 5.3.3 RTL CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css">
+
+<style>
+:root {
+  --pre: #d97706;
+  --reg: #16a34a;
+  --post: #7c3aed;
+  --off: #64748b;
+  --up: #16a34a;
+  --dn: #dc2626;
+}
+[data-bs-theme="dark"] {
+  --pre: #f59e0b;
+  --reg: #22c55e;
+  --post: #a855f7;
+  --off: #64748b;
+  --up: #4ade80;
+  --dn: #f87171;
+}
+body {
+  font-family: "IBM Plex Sans Arabic", system-ui, -apple-system, sans-serif;
+  font-variant-numeric: tabular-nums;
+  background-color: var(--bs-body-bg);
+}
+/* Hero & Clock */
+.hero-card { border-inline-start: 6px solid var(--off) !important; transition: border-color 0.3s; }
+.hero-card.pre { border-inline-start-color: var(--pre) !important; }
+.hero-card.reg { border-inline-start-color: var(--reg) !important; }
+.hero-card.post { border-inline-start-color: var(--post) !important; }
+.big-clock { font-size: 2.75rem; font-weight: 700; line-height: 1.1; direction: ltr; text-align: right; }
+.cd-clock { font-size: 1.5rem; font-weight: 700; direction: ltr; text-align: right; }
+.dot { width: 12px; height: 12px; border-radius: 50%; background: var(--off); display: inline-block; }
+.pre .dot { background: var(--pre); }
+.reg .dot { background: var(--reg); animation: pulse 1.5s infinite; }
+.post .dot { background: var(--post); }
+@keyframes pulse { 50% { opacity: 0.3; } }
+
+/* Timeline */
+.tl { position: relative; height: 34px; background: var(--bs-tertiary-bg); border-radius: 6px; direction: ltr; overflow: hidden; border: 1px solid var(--bs-border-color); }
+.tl i { position: absolute; top: 0; bottom: 0; display: block; opacity: 0.85; }
+.tl .pre { background: var(--pre); }
+.tl .reg { background: var(--reg); }
+.tl .post { background: var(--post); }
+.tl b { position: absolute; top: -2px; bottom: -2px; width: 3px; background: var(--bs-emphasis-color); z-index: 2; }
+.lg span::before { content: ""; display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-inline-end: 6px; vertical-align: -1px; background: var(--c); }
+
+/* Colors & Pills */
+.up { color: var(--up) !important; }
+.dn, .down { color: var(--dn) !important; }
+.pill { display: inline-block; padding: 2px 10px; border-radius: 99px; font-size: 0.8rem; font-weight: 600; color: #fff; background: var(--off); }
+.pill.on, .pill.reg { background: var(--reg); }
+.pill.pre { background: var(--pre); }
+.pill.post { background: var(--post); }
+
+/* Scanner Styles */
+.momo-wrap { display: flex; align-items: center; gap: 8px; min-width: 95px; direction: ltr; }
+.momo-val { font-weight: 700; font-size: 0.85rem; width: 26px; text-align: right; }
+.momo-val.hi { color: var(--up); }
+.momo-val.mid { color: var(--pre); }
+.momo-val.lo { color: var(--off); }
+.momo-val.vlo { color: var(--dn); }
+.momo-bar { flex: 1; height: 7px; background: var(--bs-secondary-bg); border-radius: 4px; overflow: hidden; display: block; }
+.momo-bar em { display: block; height: 100%; border-radius: 4px; }
+.momo-bar em.hi { background: var(--up); }
+.momo-bar em.mid { background: var(--pre); }
+.momo-bar em.lo { background: var(--off); }
+.momo-bar em.vlo { background: var(--dn); }
+
+.v-pill { display: inline-block; padding: 3px 8px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; white-space: nowrap; }
+.v-enter { background: rgba(34, 197, 94, 0.18); color: var(--up); border: 1px solid var(--up); }
+.v-watch { background: rgba(245, 158, 11, 0.18); color: var(--pre); border: 1px solid var(--pre); }
+.v-wait { background: rgba(100, 116, 139, 0.18); color: var(--bs-secondary-color); border: 1px solid var(--off); }
+.v-weak { background: rgba(100, 116, 139, 0.1); color: var(--bs-secondary-color); }
+.v-unstable { background: rgba(168, 85, 247, 0.18); color: var(--post); border: 1px solid var(--post); }
+.v-danger { background: rgba(239, 68, 68, 0.18); color: var(--dn); border: 1px solid var(--dn); }
+.verdict-notes { font-size: 0.72rem; color: var(--bs-secondary-color); margin-top: 3px; max-width: 220px; white-space: normal; }
+
+.tp-sl { display: flex; flex-direction: column; gap: 2px; font-size: 0.75rem; direction: ltr; text-align: left; white-space: nowrap; }
+.tp-sl .tp { color: var(--up); font-weight: 600; }
+.tp-sl .tp2 { color: #10b981; font-weight: 700; }
+.tp-sl .sl { color: var(--dn); font-weight: 600; }
+
+.scanner-table th, .scanner-table td { vertical-align: middle; white-space: nowrap; font-size: 0.88rem; }
+.scanner-table tbody tr { cursor: pointer; transition: background-color 0.15s; }
+.sym-col .sym { font-weight: 700; color: var(--bs-primary); font-size: 0.95rem; }
+.sym-col .sname { font-size: 0.73rem; color: var(--bs-secondary-color); max-width: 130px; overflow: hidden; text-overflow: ellipsis; }
+.num { direction: ltr; text-align: start; font-family: monospace, sans-serif; font-size: 0.9rem; }
+
+.movers-box { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.mover-item { display: flex; justify-content: space-between; padding: 4px 8px; border-radius: 4px; background: var(--bs-tertiary-bg); margin-bottom: 4px; font-size: 0.85rem; cursor: pointer; }
+.mover-item:hover { filter: brightness(1.1); }
+</style>
 </head>
-
 <body>
-  <div class="app">
 
-    <div class="top">
-      <div>
-        <h1>⏰ مواعيد البورصات بتوقيت مصر</h1>
-        <p>الساعة بتتحدث لوحدها وبتحسب التوقيت الصيفي والشتوي، وتقولك أمريكا في أنهي جلسة دلوقتي.</p>
-      </div>
-      <nav><a href="Stock_Fetcher.html">📈 Stock Fetcher</a><a href="Free_Float_Calc.html">🧮 Free Float Calc</a></nav>
+<div class="container py-3">
+
+  <!-- Header -->
+  <header class="d-flex flex-wrap justify-content-between align-items-center gap-3 pb-3 mb-3 border-bottom">
+    <div>
+      <h1 class="h4 fw-bold mb-1">⏰ مواعيد البورصات + حاسبة الأرباح + اسكانر الأسهم</h1>
+      <p class="text-body-secondary small mb-0">تحديث تلقائي للتوقيت، حفظ السهم في الكاش، مع ماسح فوري للأسهم من سنتات إلى 25 دولار.</p>
     </div>
+    <div class="d-flex flex-wrap align-items-center gap-2">
+      <a href="#calcSection" class="btn btn-sm btn-outline-primary fw-semibold">🧮 الحاسبة</a>
+      <a href="#scannerSection" class="btn btn-sm btn-primary fw-semibold">📡 الاسكانر (0.01$ - 25$)</a>
+      <a href="Stock_Fetcher.html" class="btn btn-sm btn-outline-secondary">📈 Stock Fetcher</a>
+      <a href="Free_Float_Calc.html" class="btn btn-sm btn-outline-secondary">🧮 Free Float</a>
+      <button type="button" id="themeToggle" class="btn btn-sm btn-secondary" title="تبديل المظهر">🌓</button>
+    </div>
+  </header>
 
-    <section class="hero" id="hero" aria-live="off">
-      <div>
-        <div class="mute">القاهرة <span id="tzc"></span></div>
-        <div class="big" id="clockC">--:--:--</div>
-        <div class="mute" id="dateC"></div>
-        <div class="mute" style="margin-top:6px">نيويورك: <b id="clockN" dir="ltr">--:--</b> <span id="tzn"></span>
+  <!-- Hero Clock Section -->
+  <section class="card shadow-sm mb-3 hero-card" id="hero">
+    <div class="card-body">
+      <div class="row g-4 align-items-center">
+        <div class="col-md-6 border-end-md">
+          <div class="text-body-secondary small">القاهرة <span id="tzc"></span></div>
+          <div class="big-clock my-1" id="clockC">--:--:--</div>
+          <div class="text-body-secondary small" id="dateC"></div>
+          <div class="text-body-secondary small mt-2">نيويورك: <b id="clockN" dir="ltr">--:--</b> <span id="tzn"></span></div>
+        </div>
+        <div class="col-md-6">
+          <div class="h5 fw-bold d-flex align-items-center gap-2 mb-1">
+            <span class="dot"></span><span id="stName">—</span>
+          </div>
+          <p class="text-body-secondary small mb-2" id="stDesc"></p>
+          <div class="text-body-secondary small" id="cdLabel"></div>
+          <div class="cd-clock text-primary" id="cd">--:--:--</div>
         </div>
       </div>
-      <div>
-        <div class="stname"><span class="dot"></span><span id="stName">—</span></div>
-        <p class="mute" id="stDesc" style="margin:4px 0 8px"></p>
-        <div class="mute" id="cdLabel"></div>
-        <div class="cd" id="cd">--:--:--</div>
-      </div>
-    </section>
+    </div>
+  </section>
 
-    <section>
-      <h2>خريطة اليوم بتوقيت القاهرة (24 ساعة)</h2>
+  <!-- 24H Map -->
+  <section class="card shadow-sm mb-3">
+    <div class="card-body">
+      <h2 class="h6 fw-bold mb-2">🗺️ خريطة اليوم بتوقيت القاهرة (24 ساعة)</h2>
       <div class="tl" id="tl" role="img" aria-label="الجلسات الأمريكية على مدار اليوم بتوقيت القاهرة"></div>
-      <div class="ticks">
+      <div class="d-flex justify-content-between text-body-secondary small mt-1" dir="ltr">
         <span>00</span><span>03</span><span>06</span><span>09</span><span>12</span><span>15</span><span>18</span><span>21</span><span>24</span>
       </div>
-      <div class="lg"><span style="--c:var(--pre)">Pre-Market</span><span style="--c:var(--reg)">Official
-          session</span><span style="--c:var(--post)">After Hour</span><span style="--c:var(--ink)">دلوقتي</span></div>
-    </section>
-
-    <section>
-      <h2>🇺🇸 الجلسات الأمريكية <span class="mute" id="usDay"></span></h2>
-      <div class="tw">
-        <table>
-          <thead>
-            <tr>
-              <th>الجلسة</th>
-              <th>بتوقيت نيويورك (ET)</th>
-              <th>بتوقيت القاهرة</th>
-              <th>الحالة</th>
-            </tr>
-          </thead>
-          <tbody id="usRows"></tbody>
-        </table>
+      <div class="lg d-flex flex-wrap gap-3 mt-2 small">
+        <span style="--c:var(--pre)">بري ماركت</span>
+        <span style="--c:var(--reg)">الجلسة الرسمية</span>
+        <span style="--c:var(--post)">أفتر آور</span>
+        <span style="--c:var(--bs-emphasis-color)">دلوقتي</span>
       </div>
-      <p class="warn">Intraday يعني التداول جوه اليوم الواحد: بتشتري وتبيع قبل ما اليوم يخلص، وغالباً في Official
-        session.
-      </p>
-    </section>
+    </div>
+  </section>
 
-    <section>
-      <h2>🌍 الأسواق العالمية بتوقيت القاهرة</h2>
-      <div class="tw">
-        <table>
-          <thead>
-            <tr>
-              <th>السوق</th>
-              <th>أيام التداول</th>
-              <th>من – إلى (القاهرة)</th>
-              <th>الحالة</th>
-            </tr>
-          </thead>
-          <tbody id="mkRows"></tbody>
-        </table>
-      </div>
-      <p class="warn">الأوقات للجلسة الأساسية فقط. بعض الأسواق (طوكيو وهونج كونج وشنغهاي) فيها استراحة غدا، ومش محسوب
-        فيها العطلات الرسمية ما عدا أمريكا.</p>
-    </section>
-
-    <section>
-      <h2>🔥 إمتى الحركة والأرباح العالية؟ (وإمتى الخطر)</h2>
-      <div class="grid">
-        <div class="cell hot">
-          <h3>أول ساعة بعد الافتتاح</h3><b data-et="9:30-10:30"></b>
-          <p>أعلى حجم تداول وحركة في اليوم. فرص أكبر، وخسارة أسرع كمان.</p>
+  <!-- Calculator & Cached Stock Data Section -->
+  <section class="card shadow-sm mb-3 border-primary border-opacity-50" id="calcSection">
+    <div class="card-header bg-transparent d-flex flex-wrap justify-content-between align-items-center gap-2">
+      <h2 class="h5 fw-bold mb-0">🧮 حاسبة الأرباح وبيانات السهم (محفوظة في الكاش)</h2>
+      <span class="badge bg-secondary" id="cacheBadge" hidden>💾 محفوظ في الكاش</span>
+    </div>
+    <div class="card-body">
+      
+      <!-- Search & Clear Row -->
+      <div class="row g-2 align-items-end mb-3">
+        <div class="col-sm-6 col-md-5">
+          <label for="sym" class="form-label small text-body-secondary mb-1">رمز السهم (يبقى في الكاش حتى تضغط مسح)</label>
+          <input type="text" class="form-control text-uppercase" id="sym" placeholder="مثال: AAPL أو MULN" dir="ltr">
         </div>
-        <div class="cell hot">
-          <h3>تداخل لندن ونيويورك</h3><b data-et="9:30-11:30"></b>
-          <p>سيولة قوية لأن سوقين كبار شغالين مع بعض.</p>
+        <div class="col-auto">
+          <button type="button" class="btn btn-primary fw-semibold" id="get">🔍 هات السعر والبيانات</button>
         </div>
-        <div class="cell hot">
-          <h3>آخر ساعة قبل الإغلاق</h3><b data-et="15:00-16:00"></b>
-          <p>الحجم بيرجع يزيد والمؤسسات بتقفل مراكزها، فالسعر بيتحرك بقوة.</p>
+        <div class="col-auto">
+          <button type="button" class="btn btn-outline-danger fw-semibold" id="clearCache">🗑️ مسح الكاش (Clear)</button>
         </div>
-        <div class="cell">
-          <h3>منتصف اليوم (هدوء)</h3><b data-et="11:30-14:00"></b>
-          <p>الحركة ضعيفة وغالباً مفيش اتجاه واضح. مش وقت مناسب للمبتدئ.</p>
-        </div>
-        <div class="cell risk">
-          <h3>Pre-Market</h3><b data-et="4:00-9:30"></b>
-          <p>الأخبار بتحرك السهم، بس السيولة قليلة والفرق بين سعر البيع والشراء واسع. استخدم أوامر Limit بس.</p>
-        </div>
-        <div class="cell risk">
-          <h3>After Hour</h3><b data-et="16:00-20:00"></b>
-          <p>نتايج الشركات بتنزل هنا غالباً فالسهم ممكن يقفز أو ينزل فجأة، والسيولة ضعيفة.</p>
+        <div class="col-12 mt-2">
+          <details>
+            <summary class="small text-body-secondary" style="cursor:pointer">⚙️ إعدادات رابط الـ Worker API</summary>
+            <div class="mt-2">
+              <input type="text" class="form-control form-control-sm" id="api" value="https://small-disk-18d3stock-proxy.osamaanit.workers.dev" dir="ltr">
+            </div>
+          </details>
         </div>
       </div>
-      <p class="warn">⚠️ الحركة العالية ليست ربحاً مضموناً. هي بتكبّر الربح والخسارة الاتنين.</p>
-    </section>
 
-    <section>
-      <h2>🧮 حاسبة الأرباح</h2>
-      <div class="q" id="q"></div>
-      <div class="row">
-        <div style="flex:1;min-width:160px"><label for="sym">رمز السهم (مثال: AAPL)</label><input type="text" id="sym"
-            placeholder="AAPL" autocapitalize="characters"></div>
-        <button type="button" id="get" style="align-self:end">هات السعر</button>
-      </div>
-      <details style="border:0;padding:0 0 8px">
-        <summary class="mute">إعدادات الـ API</summary>
-        <label for="api" style="margin-top:6px">رابط الـ Worker</label>
-        <input hidden readonly type="text" id="api" value="https://small-disk-18d3stock-proxy.osamaanit.workers.dev">
-      </details>
-      <div class="f">
-        <div><label for="buy">سعر الشراء ($)</label><input type="number" id="buy" step="any" min="0"></div>
-        <div><label for="sell">سعر البيع ($)</label><input type="number" id="sell" step="any" min="0"></div>
-        <div><label for="mode">احسب على أساس</label>
-          <select id="mode"
-            style="width:100%;padding:8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font:inherit">
+      <!-- Stock Info Display Card -->
+      <div id="q" class="alert alert-secondary d-none mb-3 p-3"></div>
+
+      <!-- Calculator Inputs -->
+      <div class="row g-3 mb-3">
+        <div class="col-6 col-md-3">
+          <label for="buy" class="form-label small text-body-secondary">سعر الشراء ($)</label>
+          <input type="number" class="form-control" id="buy" step="any" min="0" dir="ltr">
+        </div>
+        <div class="col-6 col-md-3">
+          <label for="sell" class="form-label small text-body-secondary">سعر البيع ($)</label>
+          <input type="number" class="form-control" id="sell" step="any" min="0" dir="ltr">
+        </div>
+        <div class="col-6 col-md-3">
+          <label for="mode" class="form-label small text-body-secondary">احسب على أساس</label>
+          <select id="mode" class="form-select">
             <option value="budget">مبلغ أستثمره</option>
             <option value="shares">عدد أسهم</option>
           </select>
         </div>
-        <div id="bw"><label for="budget">المبلغ ($)</label><input type="number" id="budget" step="any" min="0"
-            value="100"></div>
-        <div id="sw" hidden><label for="shares">عدد الأسهم</label><input type="number" id="shares" step="any" min="0"
-            value="10"></div>
-      </div>
-      <div class="row"><span class="mute">مبالغ سريعة:</span>
-        <button class="g" type="button" data-b="50">$50</button><button class="g" type="button"
-          data-b="100">$100</button><button class="g" type="button" data-b="500">$500</button><button class="g"
-          type="button" data-b="1000">$1000</button>
-        <label style="margin-inline-start:auto"><input type="checkbox" id="frac"> أسهم كسرية</label>
-      </div>
-      <div class="f">
-        <div><label for="fbf">عمولة الشراء ثابتة ($)</label><input type="number" id="fbf" step="any" min="0" value="0">
+        <div class="col-6 col-md-3" id="bw">
+          <label for="budget" class="form-label small text-body-secondary">المبلغ ($)</label>
+          <input type="number" class="form-control" id="budget" step="any" min="0" value="100" dir="ltr">
         </div>
-        <div><label for="fbp">عمولة الشراء (%)</label><input type="number" id="fbp" step="any" min="0" value="0"></div>
-        <div><label for="fsf">عمولة البيع ثابتة ($)</label><input type="number" id="fsf" step="any" min="0" value="0">
+        <div class="col-6 col-md-3" id="sw" hidden>
+          <label for="shares" class="form-label small text-body-secondary">عدد الأسهم</label>
+          <input type="number" class="form-control" id="shares" step="any" min="0" value="10" dir="ltr">
         </div>
-        <div><label for="fsp">عمولة البيع (%)</label><input type="number" id="fsp" step="any" min="0" value="0"></div>
       </div>
-      <div id="msg" class="dn"></div>
-      <div class="res" id="res"></div>
-      <div class="tw">
-        <table id="scen" hidden>
-          <thead>
-            <tr>
-              <th>لو البيع بسعر</th>
-              <th>التغيّر</th>
-              <th>صافي الربح/الخسارة</th>
-              <th>العائد</th>
-            </tr>
+
+      <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+        <span class="small text-body-secondary">مبالغ سريعة:</span>
+        <button class="btn btn-sm btn-outline-secondary" type="button" data-b="50">$50</button>
+        <button class="btn btn-sm btn-outline-secondary" type="button" data-b="100">$100</button>
+        <button class="btn btn-sm btn-outline-secondary" type="button" data-b="500">$500</button>
+        <button class="btn btn-sm btn-outline-secondary" type="button" data-b="1000">$1000</button>
+        <div class="form-check ms-auto">
+          <input class="form-check-input" type="checkbox" id="frac" checked>
+          <label class="form-check-label small" for="frac">أسهم كسرية</label>
+        </div>
+      </div>
+
+      <div class="row g-2 mb-3">
+        <div class="col-6 col-md-3">
+          <label for="fbf" class="form-label small text-body-secondary">عمولة الشراء ثابتة ($)</label>
+          <input type="number" class="form-control form-control-sm" id="fbf" step="any" min="0" value="0" dir="ltr">
+        </div>
+        <div class="col-6 col-md-3">
+          <label for="fbp" class="form-label small text-body-secondary">عمولة الشراء (%)</label>
+          <input type="number" class="form-control form-control-sm" id="fbp" step="any" min="0" value="0" dir="ltr">
+        </div>
+        <div class="col-6 col-md-3">
+          <label for="fsf" class="form-label small text-body-secondary">عمولة البيع ثابتة ($)</label>
+          <input type="number" class="form-control form-control-sm" id="fsf" step="any" min="0" value="0" dir="ltr">
+        </div>
+        <div class="col-6 col-md-3">
+          <label for="fsp" class="form-label small text-body-secondary">عمولة البيع (%)</label>
+          <input type="number" class="form-control form-control-sm" id="fsp" step="any" min="0" value="0" dir="ltr">
+        </div>
+      </div>
+
+      <div id="msg" class="text-danger small fw-semibold mb-2"></div>
+      <div class="row g-2 mb-3" id="res"></div>
+
+      <div class="table-responsive">
+        <table class="table table-sm table-hover table-bordered align-middle mb-0" id="scen" hidden>
+          <thead class="table-light">
+            <tr><th>لو البيع بسعر</th><th>التغيّر</th><th>صافي الربح/الخسارة</th><th>العائد</th></tr>
           </thead>
           <tbody></tbody>
         </table>
       </div>
-      <p class="warn">العمولة الحقيقية بتختلف من شركة لشركة (شوف جدول رسوم الوسيط بتاعك). بعض الوسطاء بياخدوا رسوم
-        تنظيمية صغيرة على البيع كمان.</p>
-    </section>
+    </div>
+  </section>
 
-    <section>
-      <h2>📚 شرح للمبتدئ</h2>
-      <details open>
-        <summary>يعني إيه بورصة وسهم؟</summary>
-        <p>البورصة سوق بيتباع فيه أجزاء من شركات. السهم جزء صغير من شركة، ولما بتشتريه بتبقى شريك بنسبة بسيطة. السعر
-          بيتحرك حسب العرض والطلب وأخبار الشركة.</p>
-      </details>
-      <details>
-        <summary>الجلسات الأمريكية: Pre-Market وRegular وAfter-Hours</summary>
-        <ul>
-          <li><b>Pre-Market:</b> من 4:00 لـ 9:30 صباحاً بتوقيت نيويورك. فيها أخبار وسيولة قليلة.</li>
-          <li><b>Regular:</b> من 9:30 لـ 4:00 العصر. هي الجلسة الرئيسية وأعلى سيولة.</li>
-          <li><b>After-Hours:</b> من 4:00 لـ 8:00 مساءً. بعد الإغلاق، وتقارير الأرباح بتنزل فيها.</li>
-        </ul>
-        <p>فرق التوقيت بين القاهرة ونيويورك بيبقى غالباً 7 ساعات، وبيتغير أسابيع قليلة في السنة لأن أمريكا ومصر بيغيروا
-          التوقيت الصيفي في مواعيد مختلفة. الصفحة بتحسبه تلقائي.</p>
-      </details>
-      <details>
-        <summary>سعر الشراء Ask وسعر البيع Bid والـ Spread</summary>
-        <p>Ask هو أقل سعر حد مستعد يبيعلك بيه (ده اللي بتشتري بيه)، وBid هو أعلى سعر حد مستعد يشتري منك بيه (ده اللي
-          بتبيع بيه). الفرق بينهم هو الـ Spread وهو تكلفة مخفية، وبيوسع في الPre-Market والAfter Hour وفي الأسهم قليلة
-          التداول.</p>
-      </details>
-      <details>
-        <summary>أنواع الأوامر: Market وLimit</summary>
-        <p><b>Market:</b> تنفيذ فوري بأي سعر متاح، ممكن يتنفذ بسعر أسوأ لو السيولة ضعيفة. <b>Limit:</b> بتحدد أقصى سعر
-          للشراء أو أقل سعر للبيع، ولو السعر ما وصلش الأمر مش بيتنفذ. استخدم Limit دايماً خارج Official session.</p>
-      </details>
-      <details>
-        <summary>إزاي العمولة بتأكل الربح؟</summary>
-        <p>لو دخلت بـ $100 وعمولة كل عملية $1، يبقى محتاج السهم يطلع حوالي 2% بس عشان تتعادل. المبالغ الصغيرة بتتأثر
-          جداً بالعمولة الثابتة، فشوف رقم التعادل في الحاسبة قبل ما تدخل.</p>
-      </details>
-      <details>
-        <summary>باقي الأسواق في العالم</summary>
-        <ul>
-          <li><b>لندن وفرانكفورت:</b> أسواق أوروبا الكبيرة، بتفتح قبل أمريكا بساعات وبتأثر على افتتاحها.</li>
-          <li><b>طوكيو وهونج كونج وشنغهاي:</b> أسواق آسيا، بتفتح الصبح بتوقيت مصر وبتخلص قبل الظهر تقريباً.</li>
-          <li><b>تداول (السعودية) والبورصة المصرية:</b> بيشتغلوا من الأحد للخميس، عكس الأسواق الأخرى.</li>
-          <li><b>العملات الرقمية:</b> شغالة 24 ساعة طول الأسبوع. <b>الفوركس:</b> شغال 24 ساعة من الاثنين للجمعة.</li>
-        </ul>
-      </details>
-      <details>
-        <summary>نصايح أمان</summary>
-        <ul>
-          <li>ابدأ بمبلغ صغير تقدر تخسره وانت مرتاح.</li>
-          <li>حدد سعر وقف الخسارة قبل الدخول.</li>
-          <li>الأسهم الرخيصة (أقل من $5) خطيرة ومتقلبة، وده سبب إن حاسبة Float فيها شرط السعر ≥ $5.</li>
-          <li>حركة السهم بدون خبر أو سيولة ممكن تكون فخ.</li>
-        </ul>
-      </details>
-    </section>
+  <!-- PRO GLOBAL SCANNER ($0.01 to $25) -->
+  <section class="card shadow-sm mb-3 border-success border-opacity-50" id="scannerSection">
+    <div class="card-header bg-transparent d-flex flex-wrap justify-content-between align-items-center gap-2">
+      <div>
+        <h2 class="h5 fw-bold mb-0">📡 اسكانر الأسهم الفوري (من سنتات $0.01 إلى $25)</h2>
+        <small class="text-body-secondary">اضغط على أي سهم في الجدول لإرساله فوراً إلى الحاسبة وحفظه في الكاش</small>
+      </div>
+      <div class="d-flex flex-wrap align-items-center gap-3">
+        <div class="form-check form-switch mb-0">
+          <input class="form-check-input" type="checkbox" id="scannerAuto">
+          <label class="form-check-label small" for="scannerAuto">تحديث تلقائي (5ث)</label>
+        </div>
+        <div class="form-check form-switch mb-0">
+          <input class="form-check-input" type="checkbox" id="scannerSound" checked>
+          <label class="form-check-label small" for="scannerSound">🔔 تنبيه صوتي</label>
+        </div>
+      </div>
+    </div>
 
-    <p class="warn">⚠️ المحتوى تعليمي فقط وليس نصيحة استثمارية. الأسعار القادمة من الـ API ممكن تتأخر عن السعر الحقيقي.
-    </p>
+    <div class="card-body">
+      <!-- Quick Price Presets -->
+      <div class="d-flex flex-wrap align-items-center gap-2 mb-3 pb-2 border-bottom">
+        <span class="small text-body-secondary fw-semibold">فلاتر سريعة للسعر:</span>
+        <button type="button" class="btn btn-xs btn-sm btn-outline-primary preset-price" data-min="0.01" data-max="25">🎯 سنتات إلى $25 (الافتراضي)</button>
+        <button type="button" class="btn btn-xs btn-sm btn-outline-warning preset-price" data-min="0.01" data-max="1">🪙 أسهم السنتات (أقل من $1)</button>
+        <button type="button" class="btn btn-xs btn-sm btn-outline-info preset-price" data-min="1" data-max="5">🔥 من $1 إلى $5</button>
+        <button type="button" class="btn btn-xs btn-sm btn-outline-success preset-price" data-min="5" data-max="25">💎 من $5 إلى $25</button>
+      </div>
+
+      <!-- Filter Controls -->
+      <div class="row g-2 mb-3">
+        <div class="col-6 col-sm-4 col-md-2">
+          <label class="form-label small text-body-secondary mb-1">أقل سعر ($)</label>
+          <input type="number" class="form-control form-control-sm" id="filterPriceMin" value="0.01" step="0.01" min="0" dir="ltr">
+        </div>
+        <div class="col-6 col-sm-4 col-md-2">
+          <label class="form-label small text-body-secondary mb-1">أعلى سعر ($)</label>
+          <input type="number" class="form-control form-control-sm" id="filterPriceMax" value="25" step="0.5" min="0" dir="ltr">
+        </div>
+        <div class="col-6 col-sm-4 col-md-2">
+          <label class="form-label small text-body-secondary mb-1">أقل فوليوم</label>
+          <input type="number" class="form-control form-control-sm" id="filterVolumeMin" value="250000" step="50000" min="0" dir="ltr">
+        </div>
+        <div class="col-6 col-sm-4 col-md-2">
+          <label class="form-label small text-body-secondary mb-1">أقل تغيّر (%)</label>
+          <input type="number" class="form-control form-control-sm" id="filterChangeMin" value="2" step="0.5" dir="ltr">
+        </div>
+        <div class="col-6 col-sm-4 col-md-2">
+          <label class="form-label small text-body-secondary mb-1">أقل RVOL</label>
+          <input type="number" class="form-control form-control-sm" id="filterRvolMin" value="1.2" step="0.1" min="0" dir="ltr">
+        </div>
+        <div class="col-6 col-sm-4 col-md-2">
+          <label class="form-label small text-body-secondary mb-1">أقل Market Cap</label>
+          <input type="number" class="form-control form-control-sm" id="filterMarketCapMin" value="0" step="1000000" min="0" dir="ltr">
+        </div>
+        <div class="col-6 col-sm-3 col-md-3">
+          <label class="form-label small text-body-secondary mb-1">البورصة</label>
+          <select class="form-select form-select-sm" id="filterMarket">
+            <option value="all">كل السوق الأمريكي</option>
+            <option value="nasdaq">NASDAQ</option>
+            <option value="nyse">NYSE</option>
+            <option value="amex">AMEX</option>
+          </select>
+        </div>
+        <div class="col-6 col-sm-3 col-md-3">
+          <label class="form-label small text-body-secondary mb-1">فلتر القرار</label>
+          <select class="form-select form-select-sm" id="filterVerdict">
+            <option value="">كل الإشارات</option>
+            <option value="enter">🚀 ادخل فوراً (ENTER)</option>
+            <option value="watch">👀 مراقبة (WATCH)</option>
+            <option value="wait">⏸️ انتظر (WAIT)</option>
+            <option value="unstable">⚡ غير مستقر</option>
+            <option value="danger">🛑 خطر</option>
+          </select>
+        </div>
+        <div class="col-6 col-sm-3 col-md-3">
+          <label class="form-label small text-body-secondary mb-1">الترتيب حسب</label>
+          <select class="form-select form-select-sm" id="filterSort">
+            <option value="change">الأعلى صعوداً (%)</option>
+            <option value="volume">الأعلى سيولة (Volume)</option>
+            <option value="rvol">الأعلى RVOL</option>
+            <option value="marketCap">القيمة السوقية</option>
+          </select>
+        </div>
+        <div class="col-6 col-sm-3 col-md-3">
+          <label class="form-label small text-body-secondary mb-1">عدد النتائج</label>
+          <select class="form-select form-select-sm" id="filterLimit">
+            <option value="30">30 سهم</option>
+            <option value="50" selected>50 سهم</option>
+            <option value="100">100 سهم</option>
+            <option value="150">150 سهم</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Action Bar -->
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <div class="d-flex flex-wrap gap-2">
+          <button type="button" class="btn btn-success btn-sm fw-bold px-3" id="scannerBtn">🚀 امسح السوق الآن</button>
+          <button type="button" class="btn btn-outline-secondary btn-sm" id="scannerStop">⏸️ إيقاف التلقائي</button>
+          <button type="button" class="btn btn-outline-warning btn-sm" id="scannerReset">🔄 استعادة افتراضي (0.01$ - 25$)</button>
+        </div>
+        <div class="d-flex align-items-center gap-3 small">
+          <span id="scannerStatus" class="fw-semibold">جاهز للمسح</span>
+          <span class="text-body-secondary">العدد: <b id="scannerCount">0</b></span>
+          <span class="text-body-secondary">آخر تحديث: <b id="scannerLastUpdate" dir="ltr">--:--:--</b></span>
+        </div>
+      </div>
+
+      <!-- Top Movers -->
+      <div id="scannerTopMovers" class="movers-box mb-3"></div>
+
+      <!-- Scanner Results Table -->
+      <div class="table-responsive" style="max-height: 560px;">
+        <table class="table table-sm table-hover table-striped align-middle scanner-table mb-0">
+          <thead class=" sticky-top bg-body-tertiary">
+            <tr>
+              <th>السهم / النشاط</th>
+              <th>السعر</th>
+              <th>التغيّر</th>
+              <th>إغلاق أمس</th>
+              <th>الفوليوم</th>
+              <th>RelVol 10D</th>
+              <th>RVOL</th>
+              <th>Free Float</th>
+              <th>M.Cap</th>
+              <th>52W%</th>
+              <th>MOMO</th>
+              <th>القرار والإشارات</th>
+              <th>الأهداف (TP / SL)</th>
+            </tr>
+          </thead>
+          <tbody id="scannerRows">
+            <tr><td colspan="13" class="text-center py-4 text-body-secondary">جاري تحميل الاسكانر...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- US Sessions & World Markets -->
+  <div class="row g-3 mb-3">
+    <div class="col-lg-6">
+      <section class="card shadow-sm h-100">
+        <div class="card-body">
+          <h2 class="h6 fw-bold mb-2">🇺🇸 الجلسات الأمريكية <span class="text-body-secondary fw-normal small" id="usDay"></span></h2>
+          <div class="table-responsive">
+            <table class="table table-sm align-middle mb-2">
+              <thead><tr><th>الجلسة</th><th>نيويورك (ET)</th><th>القاهرة</th><th>الحالة</th></tr></thead>
+              <tbody id="usRows"></tbody>
+            </table>
+          </div>
+          <p class="text-body-secondary small mb-0">Intraday يعني التداول جوه اليوم الواحد: بتشتري وتبيع قبل ما اليوم يخلص.</p>
+        </div>
+      </section>
+    </div>
+
+    <div class="col-lg-6">
+      <section class="card shadow-sm h-100">
+        <div class="card-body">
+          <h2 class="h6 fw-bold mb-2">🌍 الأسواق العالمية بتوقيت القاهرة</h2>
+          <div class="table-responsive">
+            <table class="table table-sm align-middle mb-2">
+              <thead><tr><th>السوق</th><th>الأيام</th><th>من – إلى (القاهرة)</th><th>الحالة</th></tr></thead>
+              <tbody id="mkRows"></tbody>
+            </table>
+          </div>
+          <p class="text-body-secondary small mb-0">الأوقات للجلسة الأساسية فقط بدون احتساب استراحات الغداء الآسيوية.</p>
+        </div>
+      </section>
+    </div>
   </div>
 
-  <script>
-    const CAI = 'Africa/Cairo', NY = 'America/New_York';
-    const WD = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
-    const $ = id => document.getElementById(id);
-    const pad = n => String(n).padStart(2, '0');
-    function parts(d, tz) { const o = {}; new Intl.DateTimeFormat('en-US', { timeZone: tz, hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', weekday: 'short' }).formatToParts(d).forEach(p => o[p.type] = p.value); return o }
-    function offset(d, tz) { const p = parts(d, tz); return Date.UTC(+p.year, +p.month - 1, +p.day, +p.hour, +p.minute, +p.second) - Math.floor(d.getTime() / 1000) * 1000 }
-    function wall(y, m, d, h, mi, tz) { const g = Date.UTC(y, m - 1, d, h, mi); let t = g - offset(new Date(g), tz); t = g - offset(new Date(t), tz); return t }
-    const fmt = (ms, tz) => new Intl.DateTimeFormat('en-GB', { timeZone: tz, hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).format(ms);
-    const dk = (ms, tz) => { const p = parts(new Date(ms), tz); return p.year + p.month + p.day };
-    const range = (s, e, tz) => fmt(s, tz) + ' – ' + fmt(e, tz) + (dk(e - 1, tz) !== dk(s, tz) ? ' (اليوم التالي)' : '');
-    const hms = ms => { ms = Math.max(0, Math.floor(ms / 1000)); return pad(Math.floor(ms / 3600)) + ':' + pad(Math.floor(ms % 3600 / 60)) + ':' + pad(ms % 60) };
-    const gmt = (now, tz) => { const h = offset(now, tz) / 3.6e6; return 'GMT' + (h >= 0 ? '+' : '') + h };
+  <!-- Volatility Times -->
+  <section class="card shadow-sm mb-3">
+    <div class="card-body">
+      <h2 class="h6 fw-bold mb-3">🔥 إمتى الحركة والأرباح العالية؟ (وإمتى الخطر)</h2>
+      <div class="row g-2">
+        <div class="col-md-4"><div class="p-3 border border-success rounded-3 h-100"><h3 class="h6 fw-bold mb-1">أول ساعة بعد الافتتاح</h3><b class="small text-success" data-et="9:30-10:30"></b><p class="small text-body-secondary mb-0 mt-1">أعلى حجم تداول وحركة في اليوم. فرص أكبر، وخسارة أسرع كمان.</p></div></div>
+        <div class="col-md-4"><div class="p-3 border border-success rounded-3 h-100"><h3 class="h6 fw-bold mb-1">تداخل لندن ونيويورك</h3><b class="small text-success" data-et="9:30-11:30"></b><p class="small text-body-secondary mb-0 mt-1">سيولة قوية لأن سوقين كبار شغالين مع بعض.</p></div></div>
+        <div class="col-md-4"><div class="p-3 border border-success rounded-3 h-100"><h3 class="h6 fw-bold mb-1">آخر ساعة قبل الإغلاق</h3><b class="small text-success" data-et="15:00-16:00"></b><p class="small text-body-secondary mb-0 mt-1">الحجم بيرجع يزيد والمؤسسات بتقفل مراكزها، فالسعر بيتحرك بقوة.</p></div></div>
+        <div class="col-md-4"><div class="p-3 border rounded-3 h-100"><h3 class="h6 fw-bold mb-1">منتصف اليوم (هدوء)</h3><b class="small text-body-secondary" data-et="11:30-14:00"></b><p class="small text-body-secondary mb-0 mt-1">الحركة ضعيفة وغالباً مفيش اتجاه واضح. مش وقت مناسب للمبتدئ.</p></div></div>
+        <div class="col-md-4"><div class="p-3 border border-danger rounded-3 h-100"><h3 class="h6 fw-bold mb-1">بري ماركت</h3><b class="small text-danger" data-et="4:00-9:30"></b><p class="small text-body-secondary mb-0 mt-1">الأخبار بتحرك السهم، بس السيولة قليلة والـ Spread واسع. استخدم Limit بس.</p></div></div>
+        <div class="col-md-4"><div class="p-3 border border-danger rounded-3 h-100"><h3 class="h6 fw-bold mb-1">أفتر آور</h3><b class="small text-danger" data-et="16:00-20:00"></b><p class="small text-body-secondary mb-0 mt-1">نتايج الشركات بتنزل هنا غالباً فالسهم ممكن يقفز أو ينزل فجأة.</p></div></div>
+      </div>
+    </div>
+  </section>
 
-    const HOL = new Set(['2026-01-01', '2026-01-19', '2026-02-16', '2026-04-03', '2026-05-25', '2026-06-19', '2026-07-03', '2026-09-07', '2026-11-26', '2026-12-25']);
-    const EARLY = new Set(['2026-11-27', '2026-12-24']);
-    const INFO = {
-      pre: ['Pre-Market (Pre-Market)', 'قبل الافتتاح الرسمي. سيولة أقل وفرق سعر أوسع، والأخبار بتحرك السهم. استخدم أوامر Limit.'],
-      reg: ['Official session (Regular / Intraday)', 'أعلى سيولة وتنفيذ أسرع. دي الجلسة الأنسب للمبتدئ.'],
-      post: ['After Hour (After-Hours)', 'بعد الإغلاق. نتايج الشركات بتنزل غالباً، والسيولة ضعيفة والسعر ممكن يقفز.'],
-      closed: ['السوق الأمريكي مقفول', 'عطلة أو فترة بين جلسات (بعد 8 مساءً نيويورك لحد 4 فجراً) أو عطلة نهاية الأسبوع.']
-    };
-    const NAMES = { pre: 'Pre-Market', reg: 'Official session', post: 'After Hour' };
+  <!-- Beginner Guide Accordion -->
+  <section class="card shadow-sm mb-3">
+    <div class="card-body">
+      <h2 class="h6 fw-bold mb-3">📚 شرح للمبتدئ</h2>
+      <div class="accordion accordion-flush" id="faqAcc">
+        <div class="accordion-item">
+          <h2 class="accordion-header"><button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#f1">يعني إيه بورصة وسهم و Free Float؟</button></h2>
+          <div id="f1" class="accordion-collapse collapse show" data-bs-parent="#faqAcc"><div class="accordion-body small text-body-secondary">البورصة سوق بيتباع فيه أجزاء من شركات. <b>الـ Free Float</b> هو عدد الأسهم الحرة المتاحة للتداول في السوق للجمهور (بدون أسهم المؤسسين المقيدة). لما يكون الـ Float صغير (أقل من 20 مليون سهم) ودخلت سيولة عالية، السهم بيتحرك بسرعة صاروخية.</div></div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#f2">الجلسات الأمريكية: Pre-Market وRegular وAfter-Hours</button></h2>
+          <div id="f2" class="accordion-collapse collapse" data-bs-parent="#faqAcc"><div class="accordion-body small text-body-secondary"><ul><li><b>Pre-Market:</b> من 4:00 لـ 9:30 صباحاً بتوقيت نيويورك. فيها أخبار وسيولة قليلة.</li><li><b>Regular:</b> من 9:30 لـ 4:00 العصر. هي الجلسة الرئيسية وأعلى سيولة.</li><li><b>After-Hours:</b> من 4:00 لـ 8:00 مساءً. بعد الإغلاق، وتقارير الأرباح بتنزل فيها.</li></ul></div></div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#f3">سعر الشراء Ask وسعر البيع Bid والـ Spread</button></h2>
+          <div id="f3" class="accordion-collapse collapse" data-bs-parent="#faqAcc"><div class="accordion-body small text-body-secondary">Ask هو أقل سعر حد مستعد يبيعلك بيه، وBid هو أعلى سعر حد مستعد يشتري منك بيه. الفرق بينهم هو الـ Spread وهو تكلفة مخفية بتزيد في أسهم السنتات وخارج الجلسة الرسمية.</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    function usSegs(now) {
-      const p = parts(now, NY), out = [];
-      for (let k = -1; k <= 5; k++) {
-        const dt = new Date(Date.UTC(+p.year, +p.month - 1, +p.day + k)), y = dt.getUTCFullYear(), m = dt.getUTCMonth() + 1, d = dt.getUTCDate(), wd = dt.getUTCDay();
-        const key = y + '-' + pad(m) + '-' + pad(d); if (wd == 0 || wd == 6 || HOL.has(key)) continue;
-        const e = EARLY.has(key), T = (h, mi) => wall(y, m, d, h, mi, NY);
-        out.push({ k: 'pre', s: T(4, 0), e: T(9, 30), key }, { k: 'reg', s: T(9, 30), e: T(e ? 13 : 16, 0), key }, { k: 'post', s: T(e ? 13 : 16, 0), e: T(e ? 17 : 20, 0), key });
-      }
-      return out
-    }
-    function usState(now) {
-      const t = +now, segs = usSegs(now), cur = segs.find(s => t >= s.s && t < s.e);
-      if (cur) return { k: cur.k, until: cur.e - t, segs, ref: cur.key };
-      const nx = segs.find(s => s.s > t); return { k: 'closed', until: nx.s - t, segs, ref: nx.key, nk: nx.k }
-    }
+  <p class="text-body-secondary small text-center mb-0">⚠️ المحتوى تعليمي فقط وليس نصيحة استثمارية. الأسعار القادمة من الـ API قد تتأخر ثواني عن السعر اللحظي.</p>
+</div>
 
-    function renderHero(now) {
-      const st = usState(now);
-      $('hero').className = 'hero ' + st.k;
-      $('clockC').textContent = new Intl.DateTimeFormat('en-GB', { timeZone: CAI, hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23' }).format(now);
-      $('dateC').textContent = new Intl.DateTimeFormat('ar-EG', { timeZone: CAI, dateStyle: 'full' }).format(now);
-      $('clockN').textContent = new Intl.DateTimeFormat('en-GB', { timeZone: NY, hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).format(now);
-      $('tzc').textContent = '(' + gmt(now, CAI) + ')';
-      $('tzn').textContent = '(' + new Intl.DateTimeFormat('en-US', { timeZone: NY, timeZoneName: 'short' }).format(now).split(' ').pop() + ')';
-      $('stName').textContent = INFO[st.k][0]; $('stDesc').textContent = INFO[st.k][1];
-      $('cdLabel').textContent = st.k === 'closed' ? 'بداية ' + NAMES[st.nk] + ' بعد:' : 'الجلسة بتخلص بعد:';
-      $('cd').textContent = hms(st.until); return st
-    }
+<!-- Bootstrap 5.3.3 Bundle JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    function renderTl(now, st) {
-      const t = +now, p = parts(now, CAI), S = wall(+p.year, +p.month, +p.day, 0, 0, CAI), E = S + 864e5; let h = '';
-      st.segs.forEach(s => { const a = Math.max(s.s, S), b = Math.min(s.e, E); if (b > a) h += '<i class="' + s.k + '" style="left:' + ((a - S) / 864e5 * 100) + '%;width:' + ((b - a) / 864e5 * 100) + '%" title="' + NAMES[s.k] + ': ' + range(s.s, s.e, CAI) + '"></i>' });
-      h += '<b style="left:' + ((t - S) / 864e5 * 100) + '%"></b>'; $('tl').innerHTML = h
-    }
+<script>
+/* ============================================================
+   1. THEME & CLOCKS
+============================================================ */
+const CAI = 'Africa/Cairo', NY = 'America/New_York';
+const WD = {Sun:0,Mon:1,Tue:2,Wed:3,Thu:4,Fri:5,Sat:6};
+const $ = id => document.getElementById(id);
+const pad = n => String(n).padStart(2,'0');
 
-    function renderUs(now, st) {
-      const g = st.segs.filter(s => s.key === st.ref);
-      $('usDay').textContent = '(الجدول لتاريخ ' + st.ref + ' بتوقيت نيويورك)';
-      $('usRows').innerHTML = g.map(s => {
-        const on = +now >= s.s && +now < s.e;
-        return '<tr><td><b>' + NAMES[s.k] + '</b></td><td dir="ltr" style="text-align:start">' + range(s.s, s.e, NY) + '</td><td dir="ltr" style="text-align:start">' + range(s.s, s.e, CAI) + '</td><td><span class="pill ' + (on ? (s.k === 'reg' ? 'on' : s.k) : '') + '">' + (on ? 'شغالة دلوقتي' : 'مقفولة') + '</span></td></tr>'
-      }).join('')
-    }
+// Theme Toggle
+(function initTheme(){
+  const saved = localStorage.getItem('bs_theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-bs-theme', saved);
+  $('themeToggle').addEventListener('click', () => {
+    const cur = document.documentElement.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-bs-theme', cur);
+    localStorage.setItem('bs_theme', cur);
+  });
+})();
 
-    const MK = [
-      ['🇺🇸', 'نيويورك (NYSE / Nasdaq)', NY, [1, 2, 3, 4, 5], [9, 30], [16, 0], 'US'],
-      ['🇬🇧', 'لندن (LSE)', 'Europe/London', [1, 2, 3, 4, 5], [8, 0], [16, 30]],
-      ['🇩🇪', 'فرانكفورت (Xetra)', 'Europe/Berlin', [1, 2, 3, 4, 5], [9, 0], [17, 30]],
-      ['🇯🇵', 'طوكيو (TSE)', 'Asia/Tokyo', [1, 2, 3, 4, 5], [9, 0], [15, 30]],
-      ['🇭🇰', 'هونج كونج (HKEX)', 'Asia/Hong_Kong', [1, 2, 3, 4, 5], [9, 30], [16, 0]],
-      ['🇨🇳', 'شنغهاي (SSE)', 'Asia/Shanghai', [1, 2, 3, 4, 5], [9, 30], [15, 0]],
-      ['🇸🇦', 'السعودية (تداول)', 'Asia/Riyadh', [0, 1, 2, 3, 4], [10, 0], [15, 0]],
-      ['🇪🇬', 'مصر (EGX)', CAI, [0, 1, 2, 3, 4], [10, 0], [14, 30]]];
-    const DN = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
-    function renderMk(now, st) {
-      $('mkRows').innerHTML = MK.map(m => {
-        const [fl, name, tz, days, o, c, us] = m, p = parts(now, tz), y = +p.year, mo = +p.month, d = +p.day;
-        const s = wall(y, mo, d, o[0], o[1], tz), e = wall(y, mo, d, c[0], c[1], tz), t = +now, tr = days.includes(WD[p.weekday]);
-        const open = us ? st.k === 'reg' : (tr && t >= s && t < e);
-        let note = open ? 'مفتوح' : 'مقفول'; if (!open && !us && tr && t < s) note = 'يفتح بعد ' + hms(s - t).slice(0, 5) + ' س';
-        return '<tr><td>' + fl + ' ' + name + '</td><td>' + DN[days[0]] + ' – ' + DN[days[days.length - 1]] + '</td><td dir="ltr" style="text-align:start">' + range(s, e, CAI) + '</td><td><span class="pill ' + (open ? 'on' : '') + '">' + note + '</span></td></tr>'
-      }).join('')
-    }
+function parts(d,tz){
+  const o={};
+  new Intl.DateTimeFormat('en-US',{timeZone:tz,hourCycle:'h23',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',weekday:'short'}).formatToParts(d).forEach(p=>o[p.type]=p.value);
+  return o;
+}
+function offset(d,tz){
+  const p=parts(d,tz);
+  return Date.UTC(+p.year,+p.month-1,+p.day,+p.hour,+p.minute,+p.second)-Math.floor(d.getTime()/1000)*1000;
+}
+function wall(y,m,d,h,mi,tz){
+  const g=Date.UTC(y,m-1,d,h,mi);
+  let t=g-offset(new Date(g),tz);
+  t=g-offset(new Date(t),tz);
+  return t;
+}
+const fmtTime=(ms,tz)=>new Intl.DateTimeFormat('en-GB',{timeZone:tz,hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(ms);
+const dk=(ms,tz)=>{const p=parts(new Date(ms),tz);return p.year+p.month+p.day};
+const range=(s,e,tz)=>fmtTime(s,tz)+' – '+fmtTime(e,tz)+(dk(e-1,tz)!==dk(s,tz)?' (اليوم التالي)':'');
+const hms=ms=>{ms=Math.max(0,Math.floor(ms/1000));return pad(Math.floor(ms/3600))+':'+pad(Math.floor(ms%3600/60))+':'+pad(ms%60)};
+const gmt=(now,tz)=>{const h=offset(now,tz)/3.6e6;return 'GMT'+(h>=0?'+':'')+h};
 
-    function fillEt(now) {
-      const p = parts(now, NY); document.querySelectorAll('[data-et]').forEach(el => {
-        const [a, b] = el.dataset.et.split('-').map(x => x.split(':').map(Number));
-        const s = wall(+p.year, +p.month, +p.day, a[0], a[1], NY), e = wall(+p.year, +p.month, +p.day, b[0], b[1], NY);
-        el.innerHTML = '<span dir="ltr">' + range(s, e, CAI) + '</span> <span class="mute">القاهرة</span>'
-      })
-    }
+const HOL=new Set(['2026-01-01','2026-01-19','2026-02-16','2026-04-03','2026-05-25','2026-06-19','2026-07-03','2026-09-07','2026-11-26','2026-12-25']);
+const EARLY=new Set(['2026-11-27','2026-12-24']);
+const INFO={
+ pre:['بري ماركت (Pre-Market)','قبل الافتتاح الرسمي. سيولة أقل وفرق سعر أوسع، والأخبار بتحرك السهم. استخدم أوامر Limit.'],
+ reg:['الجلسة الرسمية (Regular / Intraday)','أعلى سيولة وتنفيذ أسرع. دي الجلسة الأنسب للتداول اليومي.'],
+ post:['أفتر آور (After-Hours)','بعد الإغلاق. نتايج الشركات بتنزل غالباً، والسيولة ضعيفة والسعر ممكن يقفز.'],
+ closed:['السوق الأمريكي مقفول','عطلة أو فترة بين جلسات (بعد 8 مساءً نيويورك لحد 4 فجراً) أو عطلة نهاية الأسبوع.']
+};
+const NAMES={pre:'بري ماركت',reg:'الجلسة الرسمية',post:'أفتر آور'};
 
-    let n = 0;
-    function tick() {
-      const now = new Date(), st = renderHero(now);
-      if (n % 20 === 0) { renderTl(now, st); renderUs(now, st); renderMk(now, st); fillEt(now) } n++
-    }
-    tick(); setInterval(tick, 1000);
+function usSegs(now){
+  const p=parts(now,NY),out=[];
+  for(let k=-1;k<=5;k++){
+    const dt=new Date(Date.UTC(+p.year,+p.month-1,+p.day+k)),y=dt.getUTCFullYear(),m=dt.getUTCMonth()+1,d=dt.getUTCDate(),wd=dt.getUTCDay();
+    const key=y+'-'+pad(m)+'-'+pad(d);
+    if(wd==0||wd==6||HOL.has(key))continue;
+    const e=EARLY.has(key),T=(h,mi)=>wall(y,m,d,h,mi,NY);
+    out.push({k:'pre',s:T(4,0),e:T(9,30),key},{k:'reg',s:T(9,30),e:T(e?13:16,0),key},{k:'post',s:T(e?13:16,0),e:T(e?17:20,0),key});
+  }
+  return out;
+}
+function usState(now){
+  const t=+now,segs=usSegs(now),cur=segs.find(s=>t>=s.s&&t<s.e);
+  if(cur)return{k:cur.k,until:cur.e-t,segs,ref:cur.key};
+  const nx=segs.find(s=>s.s>t);
+  return{k:'closed',until:nx.s-t,segs,ref:nx.key,nk:nx.k};
+}
 
-    /* ---------- Calculator ---------- */
-    const num = id => parseFloat($(id).value);
-    const f = (x, d = 2) => isFinite(x) ? x.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d }) : '—';
-    const sg = x => (x > 0 ? '+' : '') + f(x);
-    function calc() {
-      const msg = $('msg'), res = $('res'), sc = $('scen'); msg.textContent = ''; res.innerHTML = ''; sc.hidden = true;
-      const p = num('buy'), s = num('sell'), fb = num('fbf') || 0, pb = num('fbp') || 0, fs = num('fsf') || 0, ps = num('fsp') || 0, frac = $('frac').checked;
-      if (!(p > 0)) { msg.textContent = 'اكتب سعر الشراء أو هات سعر سهم.'; return }
-      let sh = $('mode').value === 'budget' ? (num('budget') - fb) / (p * (1 + pb / 100)) : num('shares');
-      if (!isFinite(sh)) sh = 0; if (!frac) sh = Math.floor(sh); else sh = Math.floor(sh * 1e4) / 1e4;
-      if (!(sh > 0)) { msg.textContent = 'المبلغ مش كفاية لسهم واحد بعد العمولة.'; return }
-      const val = sh * p, cb = fb + val * pb / 100, inn = val + cb;
-      const out = (sp) => { const rev = sh * sp, cs = fs + rev * ps / 100, net = rev - cs - inn; return { rev, cs, net, pct: net / inn * 100 } };
-      const be = (inn + fs) / (sh * (1 - ps / 100));
-      const box = (l, v, c) => '<div><small>' + l + '</small><b class="' + (c || '') + '">' + v + '</b></div>';
-      let h = box('عدد الأسهم', f(sh, frac ? 4 : 0)) + box('قيمة الشراء', '$' + f(val)) + box('عمولة الشراء', '$' + f(cb)) + box('إجمالي اللي هيتدفع', '$' + f(inn));
-      if ($('mode').value === 'budget') h += box('فاضل من المبلغ', '$' + f(num('budget') - inn));
-      h += box('سعر التعادل (يغطي العمولتين)', '$' + f(be, 4));
-      if (s > 0) { const r = out(s); h += box('إجمالي البيع', '$' + f(r.rev)) + box('عمولة البيع', '$' + f(r.cs)) + box('صافي الربح/الخسارة', sg(r.net) + ' $', r.net >= 0 ? 'up' : 'dn') + box('العائد', sg(r.pct) + '%', r.net >= 0 ? 'up' : 'dn') }
-      res.innerHTML = h;
-      const base = s > 0 ? s : p;
-      sc.querySelector('tbody').innerHTML = [-10, -5, -2, -1, 0, 1, 2, 5, 10, 20].map(x => {
-        const sp = p * (1 + x / 100), r = out(sp); const c = r.net >= 0 ? 'up' : 'dn';
-        return '<tr><td dir="ltr" style="text-align:start">$' + f(sp, sp < 1 ? 4 : 2) + '</td><td dir="ltr" style="text-align:start">' + (x > 0 ? '+' : '') + x + '%</td><td class="' + c + '" dir="ltr" style="text-align:start">' + sg(r.net) + ' $</td><td class="' + c + '" dir="ltr" style="text-align:start">' + sg(r.pct) + '%</td></tr>'
-      }).join('');
-      sc.hidden = false
-    }
-    ['buy', 'sell', 'budget', 'shares', 'fbf', 'fbp', 'fsf', 'fsp', 'frac', 'mode'].forEach(id => $(id).addEventListener('input', calc));
-    $('mode').addEventListener('change', () => { const b = $('mode').value === 'budget'; $('bw').hidden = !b; $('sw').hidden = b; calc() });
-    document.querySelectorAll('[data-b]').forEach(b => b.addEventListener('click', () => { $('mode').value = 'budget'; $('bw').hidden = false; $('sw').hidden = true; $('budget').value = b.dataset.b; calc() }));
+function renderHero(now){
+  const st=usState(now);
+  $('hero').className='card shadow-sm mb-3 hero-card '+st.k;
+  $('clockC').textContent=new Intl.DateTimeFormat('en-GB',{timeZone:CAI,hour:'2-digit',minute:'2-digit',second:'2-digit',hourCycle:'h23'}).format(now);
+  $('dateC').textContent=new Intl.DateTimeFormat('ar-EG',{timeZone:CAI,dateStyle:'full'}).format(now);
+  $('clockN').textContent=new Intl.DateTimeFormat('en-GB',{timeZone:NY,hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(now);
+  $('tzc').textContent='('+gmt(now,CAI)+')';
+  $('tzn').textContent='('+new Intl.DateTimeFormat('en-US',{timeZone:NY,timeZoneName:'short'}).format(now).split(' ').pop()+')';
+  $('stName').textContent=INFO[st.k][0];
+  $('stDesc').textContent=INFO[st.k][1];
+  $('cdLabel').textContent=st.k==='closed'?'بداية '+NAMES[st.nk]+' بعد:':'الجلسة بتخلص بعد:';
+  $('cd').textContent=hms(st.until);
+  return st;
+}
 
-    /* ---------- API ---------- */
-    try { const u = localStorage.getItem('mh_api'); if (u) $('api').value = u } catch (e) { }
-    $('api').addEventListener('change', () => { try { localStorage.setItem('mh_api', $('api').value.trim()) } catch (e) { } });
-    function dig(o, keys, str) {
-      const q = [o]; while (q.length) {
-        const x = q.shift(); if (x && typeof x === 'object') {
-          for (const k of keys) {
-            if (k in x && x[k] != null) {
-              let v = x[k]; if (typeof v === 'object' && 'raw' in v) v = v.raw;
-              if (str) { if (typeof v === 'string' && v) return v } else { const nv = parseFloat(String(v).replace(/[^0-9.\-]/g, '')); if (isFinite(nv)) return nv }
-            }
+function renderTl(now,st){
+  const t=+now,p=parts(now,CAI),S=wall(+p.year,+p.month,+p.day,0,0,CAI),E=S+864e5;
+  let h='';
+  st.segs.forEach(s=>{
+    const a=Math.max(s.s,S),b=Math.min(s.e,E);
+    if(b>a)h+='<i class="'+s.k+'" style="left:'+((a-S)/864e5*100)+'%;width:'+((b-a)/864e5*100)+'%" title="'+NAMES[s.k]+': '+range(s.s,s.e,CAI)+'"></i>';
+  });
+  h+='<b style="left:'+((t-S)/864e5*100)+'%"></b>';
+  $('tl').innerHTML=h;
+}
+
+function renderUs(now,st){
+  const g=st.segs.filter(s=>s.key===st.ref);
+  $('usDay').textContent='(لتاريخ '+st.ref+' بتوقيت نيويورك)';
+  $('usRows').innerHTML=g.map(s=>{
+    const on=+now>=s.s&&+now<s.e;
+    return '<tr><td><b>'+NAMES[s.k]+'</b></td><td dir="ltr" class="text-start">'+range(s.s,s.e,NY)+'</td><td dir="ltr" class="text-start">'+range(s.s,s.e,CAI)+'</td><td><span class="pill '+(on?(s.k==='reg'?'on':s.k):'')+'">'+(on?'شغالة دلوقتي':'مقفولة')+'</span></td></tr>';
+  }).join('');
+}
+
+const MK=[
+  ['🇺🇸','نيويورك (NYSE / Nasdaq)',NY,[1,2,3,4,5],[9,30],[16,0],'US'],
+  ['🇬🇧','لندن (LSE)','Europe/London',[1,2,3,4,5],[8,0],[16,30]],
+  ['🇩🇪','فرانكفورت (Xetra)','Europe/Berlin',[1,2,3,4,5],[9,0],[17,30]],
+  ['🇯🇵','طوكيو (TSE)','Asia/Tokyo',[1,2,3,4,5],[9,0],[15,30]],
+  ['🇭🇰','هونج كونج (HKEX)','Asia/Hong_Kong',[1,2,3,4,5],[9,30],[16,0]],
+  ['🇨🇳','شنغهاي (SSE)','Asia/Shanghai',[1,2,3,4,5],[9,30],[15,0]],
+  ['🇸🇦','السعودية (تداول)','Asia/Riyadh',[0,1,2,3,4],[10,0],[15,0]],
+  ['🇪🇬','مصر (EGX)',CAI,[0,1,2,3,4],[10,0],[14,30]]
+];
+const DN=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+
+function renderMk(now,st){
+  $('mkRows').innerHTML=MK.map(m=>{
+    const[fl,name,tz,days,o,c,us]=m,p=parts(now,tz),y=+p.year,mo=+p.month,d=+p.day;
+    const s=wall(y,mo,d,o[0],o[1],tz),e=wall(y,mo,d,c[0],c[1],tz),t=+now,tr=days.includes(WD[p.weekday]);
+    const open=us?st.k==='reg':(tr&&t>=s&&t<e);
+    let note=open?'مفتوح':'مقفول';
+    if(!open&&!us&&tr&&t<s)note='يفتح بعد '+hms(s-t).slice(0,5)+' س';
+    return '<tr><td>'+fl+' '+name+'</td><td>'+DN[days[0]]+' – '+DN[days[days.length-1]]+'</td><td dir="ltr" class="text-start">'+range(s,e,CAI)+'</td><td><span class="pill '+(open?'on':'')+'">'+note+'</span></td></tr>';
+  }).join('');
+}
+
+function fillEt(now){
+  const p=parts(now,NY);
+  document.querySelectorAll('[data-et]').forEach(el=>{
+    const[a,b]=el.dataset.et.split('-').map(x=>x.split(':').map(Number));
+    const s=wall(+p.year,+p.month,+p.day,a[0],a[1],NY),e=wall(+p.year,+p.month,+p.day,b[0],b[1],NY);
+    el.innerHTML='<span dir="ltr">'+range(s,e,CAI)+'</span> <span class="text-body-secondary fw-normal">القاهرة</span>';
+  });
+}
+
+let tickCount=0;
+function tick(){
+  const now=new Date(),st=renderHero(now);
+  if(tickCount%20===0){renderTl(now,st);renderUs(now,st);renderMk(now,st);fillEt(now)}
+  tickCount++;
+}
+tick();
+setInterval(tick,1000);
+
+
+/* ============================================================
+   2. PROFIT CALCULATOR & STOCK CACHE (Until Clear Button)
+============================================================ */
+const CACHE_SYM_KEY = 'mh_cached_symbol';
+const CACHE_QUOTE_KEY = 'mh_cached_quote_data';
+
+const numVal = id => parseFloat($(id).value);
+const fNum = (x, d=2) => isFinite(x) ? Number(x).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d}) : '—';
+const fBig = n => {
+  if (!isFinite(n) || n === null) return '—';
+  n = Number(n);
+  const a = Math.abs(n);
+  if (a >= 1e12) return (n / 1e12).toFixed(2) + 'T';
+  if (a >= 1e9)  return (n / 1e9).toFixed(2) + 'B';
+  if (a >= 1e6)  return (n / 1e6).toFixed(2) + 'M';
+  if (a >= 1e3)  return (n / 1e3).toFixed(1) + 'K';
+  return n.toLocaleString('en-US');
+};
+const sg = (x, d=2) => (x>0?'+':'') + fNum(x, d);
+
+function calc(){
+  const msg=$('msg'), res=$('res'), sc=$('scen');
+  msg.textContent=''; res.innerHTML=''; sc.hidden=true;
+  const p=numVal('buy'), s=numVal('sell'), fb=numVal('fbf')||0, pb=numVal('fbp')||0, fs=numVal('fsf')||0, ps=numVal('fsp')||0, frac=$('frac').checked;
+  if(!(p>0)){msg.textContent='اكتب سعر الشراء أو اضغط على سهم من الاسكانر.';return}
+  let sh=$('mode').value==='budget'?(numVal('budget')-fb)/(p*(1+pb/100)):numVal('shares');
+  if(!isFinite(sh))sh=0;
+  if(!frac)sh=Math.floor(sh); else sh=Math.floor(sh*1e4)/1e4;
+  if(!(sh>0)){msg.textContent='المبلغ غير كافٍ لشراء سهم واحد بعد العمولة.';return}
+  const val=sh*p, cb=fb+val*pb/100, inn=val+cb;
+  const out=(sp)=>{const rev=sh*sp, cs=fs+rev*ps/100, net=rev-cs-inn; return{rev,cs,net,pct:net/inn*100}};
+  const be=(inn+fs)/(sh*(1-ps/100));
+  const dec = p < 1 ? 4 : 2;
+
+  const box=(l,v,c)=>`<div class="col-6 col-md-4 col-lg-3"><div class="p-2 rounded bg-body-tertiary border h-100"><small class="text-body-secondary d-block">${l}</small><b class="fs-6 ${c||''}" dir="ltr">${v}</b></div></div>`;
+  let h = box('عدد الأسهم', fNum(sh, frac?4:0))
+        + box('قيمة الشراء', '$'+fNum(val, 2))
+        + box('إجمالي التكلفة بالعمولة', '$'+fNum(inn, 2))
+        + box('سعر التعادل (Break-even)', '$'+fNum(be, 4));
+  if($('mode').value==='budget') h += box('المتبقي من المبلغ', '$'+fNum(numVal('budget')-inn, 2));
+  if(s>0){
+    const r=out(s);
+    h += box('إجمالي البيع', '$'+fNum(r.rev, 2))
+       + box('صافي الربح / الخسارة', sg(r.net, 2)+' $', r.net>=0?'up':'dn')
+       + box('نسبة العائد (ROI)', sg(r.pct, 2)+'%', r.net>=0?'up':'dn');
+  }
+  res.innerHTML=h;
+
+  sc.querySelector('tbody').innerHTML=[-15,-10,-5,-2,0,2,5,10,20,35].map(x=>{
+    const sp=p*(1+x/100), r=out(sp), c=r.net>=0?'up':'dn';
+    return `<tr><td dir="ltr" class="text-start">$${fNum(sp, dec)}</td><td dir="ltr" class="text-start">${x>0?'+':''}${x}%</td><td class="${c} fw-bold" dir="ltr" class="text-start">${sg(r.net, 2)} $</td><td class="${c}" dir="ltr" class="text-start">${sg(r.pct, 2)}%</td></tr>`;
+  }).join('');
+  sc.hidden=false;
+}
+
+['buy','sell','budget','shares','fbf','fbp','fsf','fsp','frac','mode'].forEach(id=>$(id).addEventListener('input',calc));
+$('mode').addEventListener('change',()=>{const b=$('mode').value==='budget';$('bw').hidden=!b;$('sw').hidden=b;calc()});
+document.querySelectorAll('[data-b]').forEach(b=>b.addEventListener('click',()=>{$('mode').value='budget';$('bw').hidden=false;$('sw').hidden=true;$('budget').value=b.dataset.b;calc()}));
+
+/* ---------- Deep Object Extractor ---------- */
+function dig(o, keys, isStr){
+  const q=[o];
+  while(q.length){
+    const x=q.shift();
+    if(x && typeof x==='object'){
+      for(const k of keys){
+        if(k in x && x[k]!=null){
+          let v=x[k];
+          if(typeof v==='object' && 'raw' in v) v=v.raw;
+          if(typeof v==='object' && 'fmt' in v && isStr) v=v.fmt;
+          if(isStr){
+            if(typeof v==='string' && v.trim()) return v.trim();
+          } else {
+            const nv=parseFloat(String(v).replace(/[^0-9.\-]/g,''));
+            if(isFinite(nv)) return nv;
           }
-          q.push(...Object.values(x))
         }
-      } return null
-    }
-    async function getQuote(sym) {
-      const base = $('api').value.trim().replace(/\/+$/, ''); const s = encodeURIComponent(sym);
-      const urls = [base + '/?symbol=' + s, base + '/?ticker=' + s, base + '/quote?symbol=' + s, base + '/' + s, base + '/?q=' + s]; let last = '';
-      for (const u of urls) {
-        try {
-          const r = await fetch(u); if (!r.ok) { last = 'HTTP ' + r.status; continue }
-          const j = await r.json(); const price = dig(j, ['price', 'regularMarketPrice', 'last', 'lastPrice', 'currentPrice', 'c', 'close']);
-          if (price != null) return { price, j }
-        } catch (e) { last = e.message }
       }
-      throw new Error(last || 'مفيش سعر في الرد')
+      q.push(...Object.values(x));
     }
-    $('get').addEventListener('click', async () => {
-      const sym = $('sym').value.trim().toUpperCase(), q = $('q'), b = $('get');
-      if (!sym) { q.className = 'q show'; q.textContent = 'اكتب رمز السهم الأول.'; return }
-      b.disabled = true; b.textContent = 'بيجيب...';
-      try {
-        const { price, j } = await getQuote(sym);
-        const nm = dig(j, ['shortName', 'longName', 'name', 'companyName'], true), pc = dig(j, ['previousClose', 'regularMarketPreviousClose', 'pc', 'prevClose']),
-          chg = dig(j, ['changePercent', 'regularMarketChangePercent', 'dp']), vol = dig(j, ['volume', 'regularMarketVolume', 'v']),
-          bid = dig(j, ['bid']), ask = dig(j, ['ask']), mc = dig(j, ['marketCap']);
-        const bits = ['<b>' + sym + '</b>' + (nm ? ' · ' + nm : ''), 'السعر: <b>$' + f(price) + '</b>'];
-        if (chg != null) bits.push('التغيّر: <b class="' + (chg >= 0 ? 'up' : 'dn') + '">' + sg(chg) + '%</b>');
-        if (pc != null) bits.push('إغلاق أمس: $' + f(pc));
-        if (bid != null && ask != null) bits.push('Bid: $' + f(bid) + ' · Ask: $' + f(ask));
-        if (vol != null) bits.push('الحجم: ' + Math.round(vol).toLocaleString('en-US'));
-        if (mc != null) bits.push('Market Cap: ' + Math.round(mc).toLocaleString('en-US'));
-        q.innerHTML = bits.join('<br>'); q.className = 'q show';
-        $('buy').value = (ask != null ? ask : price); if (bid != null) $('sell').value = bid; calc()
-      } catch (e) { q.className = 'q show'; q.innerHTML = '<span class="dn">مقدرتش أجيب السعر (' + e.message + ').</span> اتأكد من رابط الـ Worker في الإعدادات ومن الرمز، أو اكتب السعر بإيدك.' }
-      b.disabled = false; b.textContent = 'هات السعر'
-    });
-    $('sym').addEventListener('keydown', e => { if (e.key === 'Enter') $('get').click() });
-    calc();
-  </script>
-</body>
+  }
+  return null;
+}
 
+/* ---------- Render Stock Quote Card ---------- */
+function renderQuoteCard(data) {
+  const q = $('q');
+  q.className = 'alert alert-secondary mb-3 p-3';
+  const chgCls = (data.chg || 0) >= 0 ? 'up' : 'dn';
+  const priceDec = data.price < 1 ? 4 : 2;
+  const pcDec = (data.pc && data.pc < 1) ? 4 : 2;
+
+  q.innerHTML = `
+    <div class="d-flex flex-wrap justify-content-between align-items-center border-bottom pb-2 mb-2 gap-2">
+      <div>
+        <span class="h5 fw-bold text-primary mb-0 me-2">${data.sym}</span>
+        <span class="fw-semibold">${data.name || ''}</span>
+        <span class="badge bg-info text-dark ms-2">🏢 النشاط: ${data.activity || 'غير محدد'}</span>
+      </div>
+      <div class="fs-5 fw-bold" dir="ltr">
+        $${fNum(data.price, priceDec)}
+        ${data.chg != null ? `<span class="ms-2 fs-6 ${chgCls}">(${sg(data.chg, 2)}%)</span>` : ''}
+      </div>
+    </div>
+    <div class="row g-2 small">
+      <div class="col-6 col-sm-4 col-md-2"><span class="text-body-secondary d-block">إغلاق أمس (Prev Close):</span><b dir="ltr">${data.pc != null ? '$' + fNum(data.pc, pcDec) : '—'}</b></div>
+      <div class="col-6 col-sm-4 col-md-2"><span class="text-body-secondary d-block">الفوليوم (Volume):</span><b dir="ltr">${data.vol != null ? fBig(data.vol) : '—'} (${ data.vol != null ? Math.round(data.vol).toLocaleString('en-US') : '—' })</b></div>
+      <div class="col-6 col-sm-4 col-md-3"><span class="text-body-secondary d-block">الأسهم الحرة (Free Float):</span><b class="text-warning" dir="ltr">${data.floatShares != null ? fBig(data.floatShares) + (data.floatPct ? ` (${fNum(data.floatPct,1)}%)` : '') : '—'}</b></div>
+      <div class="col-6 col-sm-4 col-md-2"><span class="text-body-secondary d-block">القيمة السوقية (M.Cap):</span><b dir="ltr">${data.mc != null ? '$' + fBig(data.mc) : '—'}</b></div>
+      <div class="col-12 col-sm-8 col-md-3"><span class="text-body-secondary d-block">العرض والطلب (Bid / Ask):</span><b dir="ltr">Bid: ${data.bid != null ? '$'+fNum(data.bid, priceDec) : '—'} | Ask: ${data.ask != null ? '$'+fNum(data.ask, priceDec) : '—'}</b></div>
+    </div>
+  `;
+}
+
+function saveStockToCache(data) {
+  try {
+    localStorage.setItem(CACHE_SYM_KEY, data.sym);
+    localStorage.setItem(CACHE_QUOTE_KEY, JSON.stringify(data));
+    $('cacheBadge').hidden = false;
+  } catch (e) {}
+}
+
+/* ---------- Fetch Quote + Supplemental Scan Data ---------- */
+async function fetchFullStockData(sym) {
+  const base = $('api').value.trim().replace(/\/+$/,'');
+  const s = encodeURIComponent(sym);
+  const urls = [
+    base + '/?symbol=' + s,
+    base + '/quote?symbol=' + s,
+    base + '/?ticker=' + s,
+    base + '/' + s
+  ];
+
+  let quoteJson = null, price = null, lastErr = '';
+  for (const u of urls) {
+    try {
+      const r = await fetch(u);
+      if (!r.ok) { lastErr = 'HTTP ' + r.status; continue; }
+      const j = await r.json();
+      const p = dig(j, ['price','regularMarketPrice','last','lastPrice','currentPrice','c','close']);
+      if (p != null) { price = p; quoteJson = j; break; }
+    } catch (e) { lastErr = e.message; }
+  }
+
+  // Extract initial fields from quote endpoint
+  let data = {
+    sym: sym,
+    price: price,
+    name: quoteJson ? dig(quoteJson, ['shortName','longName','name','companyName','description'], true) : null,
+    activity: quoteJson ? dig(quoteJson, ['sector','industry','category','sectorDisp','industryDisp','finnhubIndustry','sic_description'], true) : null,
+    pc: quoteJson ? dig(quoteJson, ['previousClose','regularMarketPreviousClose','pc','prevClose','prev_close']) : null,
+    chg: quoteJson ? dig(quoteJson, ['changePercent','regularMarketChangePercent','dp','change_percent','changePct']) : null,
+    vol: quoteJson ? dig(quoteJson, ['volume','regularMarketVolume','v','vol']) : null,
+    floatShares: quoteJson ? dig(quoteJson, ['floatShares','float_shares','freeFloat','sharesFloat','float','shares_float']) : null,
+    floatPct: quoteJson ? dig(quoteJson, ['floatPct','float_pct']) : null,
+    mc: quoteJson ? dig(quoteJson, ['marketCap','market_cap','market_cap_basic']) : null,
+    bid: quoteJson ? dig(quoteJson, ['bid','bidPrice']) : null,
+    ask: quoteJson ? dig(quoteJson, ['ask','askPrice']) : null
+  };
+
+  // If Float, Activity, or Price is missing, try querying the /scan endpoint for this ticker
+  if (data.price == null || data.floatShares == null || !data.activity || data.pc == null) {
+    try {
+      const scanRes = await fetch(base + '/scan', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          filters: [{ left: 'name', operation: 'equal', right: sym }],
+          range: [0, 5]
+        })
+      });
+      if (scanRes.ok) {
+        const sj = await scanRes.json();
+        const row = (sj.data || []).find(item => String(item.symbol).toUpperCase() === sym);
+        if (row) {
+          if (data.price == null) data.price = row.price;
+          if (!data.name) data.name = row.name;
+          if (!data.activity) data.activity = row.sector || row.industry || row.description || null;
+          if (data.vol == null) data.vol = row.volume;
+          if (data.chg == null) data.chg = row.changePct;
+          if (data.floatShares == null) data.floatShares = row.floatShares;
+          if (data.floatPct == null) data.floatPct = row.floatPct;
+          if (data.mc == null) data.mc = row.marketCap;
+          if (data.pc == null && row.price != null && row.changePct != null) {
+            data.pc = row.price / (1 + (row.changePct / 100));
+          }
+        }
+      }
+    } catch (e) {}
+  }
+
+  // Calculate previous close if still missing but price and changePct exist
+  if (data.pc == null && data.price != null && data.chg != null) {
+    data.pc = data.price / (1 + (data.chg / 100));
+  }
+
+  if (data.price == null) throw new Error(lastErr || 'لم يتم العثور على بيانات السهم');
+  return data;
+}
+
+/* ---------- Events for Stock Fetcher & Clear Button ---------- */
+$('sym').addEventListener('input', () => {
+  const val = $('sym').value.trim().toUpperCase();
+  if (val) {
+    localStorage.setItem(CACHE_SYM_KEY, val);
+    $('cacheBadge').hidden = false;
+  }
+});
+
+$('get').addEventListener('click', async () => {
+  const sym = $('sym').value.trim().toUpperCase();
+  const q = $('q'), b = $('get');
+  if (!sym) {
+    q.className = 'alert alert-warning mb-3 p-2';
+    q.textContent = '⚠️ اكتب رمز السهم أولاً.';
+    return;
+  }
+  b.disabled = true;
+  b.textContent = '⏳ جاري الجلب...';
+  try {
+    const data = await fetchFullStockData(sym);
+    renderQuoteCard(data);
+    saveStockToCache(data);
+    $('buy').value = (data.ask != null && data.ask > 0) ? data.ask : data.price;
+    if (data.bid != null && data.bid > 0) $('sell').value = data.bid;
+    calc();
+  } catch (e) {
+    q.className = 'alert alert-danger mb-3 p-2';
+    q.innerHTML = `❌ تعذر جلب السعر (${e.message}). تأكد من الرمز أو رابط الـ Worker.`;
+  }
+  b.disabled = false;
+  b.textContent = '🔍 هات السعر والبيانات';
+});
+
+$('sym').addEventListener('keydown', e => { if (e.key === 'Enter') $('get').click(); });
+
+// Clear Cache Button
+$('clearCache').addEventListener('click', () => {
+  try {
+    localStorage.removeItem(CACHE_SYM_KEY);
+    localStorage.removeItem(CACHE_QUOTE_KEY);
+  } catch (e) {}
+  $('sym').value = '';
+  $('buy').value = '';
+  $('sell').value = '';
+  $('q').className = 'alert alert-secondary d-none mb-3 p-3';
+  $('q').innerHTML = '';
+  $('res').innerHTML = '';
+  $('scen').hidden = true;
+  $('msg').textContent = '';
+  $('cacheBadge').hidden = true;
+});
+
+// Restore Cached Symbol & Quote on Page Load
+(function restoreCache() {
+  try {
+    const savedApi = localStorage.getItem('mh_api');
+    if (savedApi) $('api').value = savedApi;
+    $('api').addEventListener('change', () => localStorage.setItem('mh_api', $('api').value.trim()));
+
+    const savedSym = localStorage.getItem(CACHE_SYM_KEY);
+    const savedQuote = localStorage.getItem(CACHE_QUOTE_KEY);
+    if (savedSym) {
+      $('sym').value = savedSym;
+      $('cacheBadge').hidden = false;
+    }
+    if (savedQuote) {
+      const data = JSON.parse(savedQuote);
+      if (data && data.sym) {
+        renderQuoteCard(data);
+        $('buy').value = (data.ask != null && data.ask > 0) ? data.ask : data.price;
+        if (data.bid != null && data.bid > 0) $('sell').value = data.bid;
+        calc();
+      }
+    }
+  } catch (e) {}
+})();
+
+
+/* ============================================================
+   3. PRO GLOBAL SCANNER (Cents $0.01 to $25)
+============================================================ */
+(function () {
+  "use strict";
+
+  var tbody = document.getElementById('scannerRows');
+  if (!tbody) return;
+
+  var scanBtn    = document.getElementById('scannerBtn');
+  var stopBtn    = document.getElementById('scannerStop');
+  var statusEl   = document.getElementById('scannerStatus');
+  var lastUpdate = document.getElementById('scannerLastUpdate');
+  var countEl    = document.getElementById('scannerCount');
+  var autoEl     = document.getElementById('scannerAuto');
+  var soundEl    = document.getElementById('scannerSound');
+  var topMovers  = document.getElementById('scannerTopMovers');
+
+  var fPriceMin  = document.getElementById('filterPriceMin');
+  var fPriceMax  = document.getElementById('filterPriceMax');
+  var fVolumeMin = document.getElementById('filterVolumeMin');
+  var fCapMin    = document.getElementById('filterMarketCapMin');
+  var fChangeMin = document.getElementById('filterChangeMin');
+  var fRvolMin   = document.getElementById('filterRvolMin');
+  var fMarket    = document.getElementById('filterMarket');
+  var fLimit     = document.getElementById('filterLimit');
+  var fVerdict   = document.getElementById('filterVerdict');
+  var fSort      = document.getElementById('filterSort');
+  var resetBtn   = document.getElementById('scannerReset');
+
+  var K_FILTERS = 'scanner-filters-v3-penny25';
+  var lastScannedRows = [];
+
+  function lsGet(k, def) { try { var v = localStorage.getItem(k); return v == null ? def : v; } catch (e) { return def; } }
+  function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+
+  function saveFilters() {
+    lsSet(K_FILTERS, JSON.stringify({
+      priceMin: fPriceMin.value, priceMax: fPriceMax.value,
+      volumeMin: fVolumeMin.value, capMin: fCapMin.value,
+      changeMin: fChangeMin.value, rvolMin: fRvolMin.value,
+      market: fMarket.value, limit: fLimit.value,
+      verdict: fVerdict ? fVerdict.value : '',
+      sort: fSort ? fSort.value : 'change'
+    }));
+  }
+
+  function loadFilters() {
+    try {
+      var f = JSON.parse(lsGet(K_FILTERS, 'null'));
+      if (!f) return;
+      if (f.priceMin != null) fPriceMin.value = f.priceMin;
+      if (f.priceMax != null) fPriceMax.value = f.priceMax;
+      if (f.volumeMin != null) fVolumeMin.value = f.volumeMin;
+      if (f.capMin != null) fCapMin.value = f.capMin;
+      if (f.changeMin != null) fChangeMin.value = f.changeMin;
+      if (f.rvolMin != null) fRvolMin.value = f.rvolMin;
+      if (f.market != null) fMarket.value = f.market;
+      if (f.limit != null) fLimit.value = f.limit;
+      if (f.verdict != null && fVerdict) fVerdict.value = f.verdict;
+      if (f.sort != null && fSort) fSort.value = f.sort;
+    } catch (e) {}
+  }
+  loadFilters();
+
+  [fPriceMin, fPriceMax, fVolumeMin, fCapMin, fChangeMin, fRvolMin, fMarket, fLimit, fVerdict, fSort]
+    .forEach(function (el) { if (el) el.addEventListener('change', saveFilters); });
+
+  // Quick Price Preset Buttons
+  document.querySelectorAll('.preset-price').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      fPriceMin.value = btn.getAttribute('data-min');
+      fPriceMax.value = btn.getAttribute('data-max');
+      saveFilters();
+      doScan();
+    });
+  });
+
+  function isNum(n) { return n !== null && n !== undefined && Number.isFinite(Number(n)); }
+  function num(v) { if (v === '' || v == null) return null; var n = Number(v); return Number.isFinite(n) ? n : null; }
+  function fmt(n, d) {
+    if (!isNum(n)) return '—';
+    d = d == null ? 2 : d;
+    return Number(n).toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
+  }
+  function fmtBig(n) {
+    if (!isNum(n)) return '—';
+    n = Number(n);
+    var a = Math.abs(n);
+    if (a >= 1e12) return (n / 1e12).toFixed(2) + 'T';
+    if (a >= 1e9)  return (n / 1e9).toFixed(2) + 'B';
+    if (a >= 1e6)  return (n / 1e6).toFixed(2) + 'M';
+    if (a >= 1e3)  return (n / 1e3).toFixed(1) + 'K';
+    return n.toFixed(0);
+  }
+  function setStatus(msg, cls) {
+    statusEl.textContent = msg;
+    statusEl.className = 'fw-semibold ' + (cls || '');
+  }
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+  }
+
+  /* ============ MOMO Score (Tuned for $0.01 - $25) ============ */
+  function computeMomo(s) {
+    var price  = num(s.price) || 0;
+    var chg    = num(s.changePct) || 0;
+    var vol    = num(s.volume) || 0;
+    var avg30  = num(s.avgVolume3M) || 0;
+    var rvol   = avg30 > 0 ? vol / avg30 : (num(s.relVol10D) || 0);
+    var floatS = num(s.floatShares) || 0;
+    var w52    = num(s.week52Pos);
+    var vwapD  = num(s.vwapDiff);
+
+    var score = 50;
+
+    if (rvol >= 5) score += 25;
+    else if (rvol >= 3) score += 18;
+    else if (rvol >= 2) score += 12;
+    else if (rvol >= 1.5) score += 6;
+    else if (rvol < 1) score -= 10;
+
+    if (chg >= 4 && chg <= 15) score += 15;
+    else if (chg > 15 && chg <= 30) score += 12;
+    else if (chg > 30 && chg <= 50) score += 5;
+    else if (chg > 50) score -= 5;
+    else if (chg >= 1 && chg < 4) score += 5;
+    else if (chg < 0) score -= 15;
+
+    var ffM = floatS / 1e6;
+    if (ffM > 0 && ffM <= 5) score += 15;
+    else if (ffM > 0 && ffM <= 20) score += 10;
+    else if (ffM > 0 && ffM <= 50) score += 5;
+    else if (ffM > 200) score -= 10;
+
+    if (w52 != null) {
+      if (w52 >= 85) score += 8;
+      else if (w52 >= 65) score += 4;
+      else if (w52 <= 15) score -= 6;
+    }
+
+    if (vwapD != null) {
+      if (vwapD > 2) score += 7;
+      else if (vwapD > 0) score += 3;
+      else if (vwapD < -2) score -= 7;
+    }
+
+    if (vol > 0 && vol < 100000) score -= 15;
+
+    return Math.max(0, Math.min(100, Math.round(score)));
+  }
+
+  /* ============ Verdict Engine ============ */
+  function computeVerdict(s) {
+    var price  = num(s.price) || 0;
+    var chg    = num(s.changePct) || 0;
+    var vol    = num(s.volume) || 0;
+    var avg30  = num(s.avgVolume3M) || 0;
+    var rvol   = avg30 > 0 ? vol / avg30 : (num(s.relVol10D) || 0);
+    var momo   = computeMomo(s);
+    var floatS = num(s.floatShares) || 0;
+    var w52    = num(s.week52Pos);
+
+    var type = 'wait';
+    var signals = [];
+    var risks = [];
+
+    if (rvol >= 3)      signals.push('🔥 RVOL ' + rvol.toFixed(1) + 'x');
+    else if (rvol >= 2) signals.push('📈 RVOL ' + rvol.toFixed(1) + 'x');
+    else if (rvol >= 1.5) signals.push('📊 RVOL نشط');
+
+    if (chg >= 4 && chg <= 20) signals.push('✅ صعود ' + chg.toFixed(1) + '%');
+    else if (chg > 20 && chg <= 40) signals.push('🚀 فوران ' + chg.toFixed(1) + '%');
+
+    if (floatS > 0 && floatS <= 15e6) signals.push('💎 Float خفيف ' + (floatS/1e6).toFixed(1) + 'M');
+    if (w52 != null && w52 >= 85) signals.push('🏔️ قمة 52W');
+
+    if (price > 0 && price < 1) risks.push('🪙 سهم سنتات (<$1)');
+    if (chg > 45)     risks.push('⚡ متضخم جداً');
+    if (chg < -5)     risks.push('📉 هبوط حاد');
+    if (rvol > 20)    risks.push('🎰 مضاربة عنيفة');
+    if (vol > 0 && vol < 100000) risks.push('💧 سيولة ضعيفة');
+    if (floatS > 120e6) risks.push('🐘 Float ثقيل');
+
+    if (vol > 0 && vol < 80000) {
+      type = 'danger';
+    } else if (chg > 55 || chg < -8) {
+      type = 'unstable';
+    } else if (momo >= 72 && rvol >= 1.8 && chg >= 3 && chg <= 40) {
+      type = 'enter';
+    } else if (momo >= 58 && rvol >= 1.3) {
+      type = 'watch';
+    } else if (momo >= 45) {
+      type = 'wait';
+    } else {
+      type = 'weak';
+    }
+
+    var tp1, tp2, sl;
+    if (price > 0) {
+      var vol_pct = Math.max(Math.abs(chg) / 100, 0.04);
+      tp1 = price * (1 + Math.min(0.25, Math.max(0.05, vol_pct * 0.8)));
+      tp2 = price * (1 + Math.min(0.45, Math.max(0.10, vol_pct * 1.5)));
+      sl  = price * (1 - Math.min(0.12, Math.max(0.03, vol_pct * 0.4)));
+    }
+
+    var labels = {
+      enter:    { txt: '🚀 ادخل فوراً',  cls: 'enter' },
+      watch:    { txt: '👀 مراقبة',      cls: 'watch' },
+      wait:     { txt: '⏸️ انتظر',       cls: 'wait' },
+      weak:     { txt: '💤 ضعيف',        cls: 'weak' },
+      unstable: { txt: '⚡ غير مستقر',   cls: 'unstable' },
+      danger:   { txt: '🛑 خطر',         cls: 'danger' }
+    };
+
+    return {
+      type: type, label: labels[type].txt, cls: labels[type].cls,
+      momo: momo, signals: signals, risks: risks,
+      tp1: tp1, tp2: tp2, sl: sl, rvol: rvol
+    };
+  }
+
+  function buildApiFilters() {
+    var filters = [];
+    var pMin = num(fPriceMin.value), pMax = num(fPriceMax.value);
+    var vMin = num(fVolumeMin.value), cMin = num(fCapMin.value);
+    var chgMin = num(fChangeMin.value), rvMin = num(fRvolMin.value);
+
+    if (pMin != null && pMax != null) {
+      filters.push({ left: 'close', operation: 'in_range', right: [pMin, pMax] });
+    } else if (pMin != null) {
+      filters.push({ left: 'close', operation: 'greater', right: pMin });
+    } else if (pMax != null) {
+      filters.push({ left: 'close', operation: 'less', right: pMax });
+    }
+
+    if (vMin != null && vMin > 0) filters.push({ left: 'volume', operation: 'greater', right: vMin });
+    if (cMin != null && cMin > 0) filters.push({ left: 'market_cap_basic', operation: 'greater', right: cMin });
+    if (chgMin != null) filters.push({ left: 'change', operation: 'greater', right: chgMin });
+    if (rvMin != null && rvMin > 0) filters.push({ left: 'relative_volume_10d_calc', operation: 'greater', right: rvMin });
+
+    var market = fMarket.value;
+    if (market === 'nasdaq') filters.push({ left: 'exchange', operation: 'equal', right: 'NASDAQ' });
+    else if (market === 'nyse') filters.push({ left: 'exchange', operation: 'equal', right: 'NYSE' });
+    else if (market === 'amex') filters.push({ left: 'exchange', operation: 'equal', right: 'AMEX' });
+
+    filters.push({ left: 'type', operation: 'equal', right: 'stock' });
+    return filters;
+  }
+
+  function buildSort() {
+    var s = fSort ? fSort.value : 'change';
+    var map = {
+      volume:   { sortBy: 'volume', sortOrder: 'desc' },
+      change:   { sortBy: 'change', sortOrder: 'desc' },
+      rvol:     { sortBy: 'relative_volume_10d_calc', sortOrder: 'desc' },
+      marketCap:{ sortBy: 'market_cap_basic', sortOrder: 'desc' }
+    };
+    return map[s] || map.change;
+  }
+
+  function momoBar(score) {
+    var cls = score >= 72 ? 'hi' : score >= 55 ? 'mid' : score >= 35 ? 'lo' : 'vlo';
+    return '<div class="momo-wrap">' +
+      '<span class="momo-val ' + cls + '">' + score + '</span>' +
+      '<i class="momo-bar"><em class="' + cls + '" style="width:' + score + '%"></em></i>' +
+    '</div>';
+  }
+
+  function renderRow(s) {
+    var v = computeVerdict(s);
+    var price = num(s.price);
+    var dec = (price != null && price < 1) ? 4 : 2;
+    var chg = num(s.changePct);
+    var chgCls = (chg || 0) >= 0 ? 'up' : 'down';
+
+    // Calculate Previous Close
+    var prevClose = num(s.previousClose || s.prevClose);
+    if (prevClose == null && price != null && chg != null) {
+      prevClose = price / (1 + (chg / 100));
+    }
+
+    var priceStr = isNum(price) ? '$' + fmt(price, dec) : '—';
+    var pcStr    = isNum(prevClose) ? '$' + fmt(prevClose, dec) : '—';
+    var chgStr   = isNum(chg) ? (chg >= 0 ? '+' : '') + fmt(chg, 2) + '%' : '—';
+    var volStr   = fmtBig(s.volume);
+    var relVol   = isNum(s.relVol10D) ? fmt(s.relVol10D, 2) + 'x' : '—';
+    var rvolStr  = v.rvol > 0 ? fmt(v.rvol, 2) + 'x' : '—';
+    var mcStr    = fmtBig(s.marketCap);
+    var floatStr = isNum(s.floatShares) ? fmtBig(s.floatShares) + (isNum(s.floatPct) ? ' <small class="text-body-secondary">(' + fmt(s.floatPct,0) + '%)</small>' : '') : '—';
+    var w52Str   = isNum(s.week52Pos) ? fmt(s.week52Pos, 0) + '%' : '—';
+    var actStr   = s.sector || s.industry || '';
+
+    var tpSlHtml = '';
+    if (v.tp1 && v.sl && (v.type === 'enter' || v.type === 'watch')) {
+      tpSlHtml =
+        '<div class="tp-sl">' +
+          '<span class="tp">TP1: $' + fmt(v.tp1, dec) + '</span>' +
+          '<span class="tp2">TP2: $' + fmt(v.tp2, dec) + '</span>' +
+          '<span class="sl">SL: $' + fmt(v.sl, dec) + '</span>' +
+        '</div>';
+    } else if (v.type === 'danger' || v.type === 'unstable') {
+      tpSlHtml = '<div class="tp-sl text-body-secondary">' + esc(v.risks[0] || '—') + '</div>';
+    } else {
+      tpSlHtml = '<div class="tp-sl text-body-secondary">—</div>';
+    }
+
+    var allNotes = v.signals.concat(v.risks);
+    var noteHtml = allNotes.length ? '<div class="verdict-notes">' + allNotes.map(esc).join(' · ') + '</div>' : '';
+
+    return '<tr data-symbol="' + esc(s.symbol) + '">' +
+      '<td class="sym-col">' +
+        '<div class="sym">' + esc(s.symbol) + '</div>' +
+        '<div class="sname" title="' + esc(s.name) + '">' + esc(s.name || '') + '</div>' +
+        (actStr ? '<span class="badge bg-secondary bg-opacity-25 text-body-secondary" style="font-size:0.65rem">' + esc(actStr) + '</span>' : '') +
+      '</td>' +
+      '<td class="num fw-bold">' + priceStr + '</td>' +
+      '<td class="num fw-bold ' + chgCls + '">' + chgStr + '</td>' +
+      '<td class="num text-body-secondary">' + pcStr + '</td>' +
+      '<td class="num">' + volStr + '</td>' +
+      '<td class="num">' + relVol + '</td>' +
+      '<td class="num">' + rvolStr + '</td>' +
+      '<td class="num text-warning">' + floatStr + '</td>' +
+      '<td class="num">' + mcStr + '</td>' +
+      '<td class="num">' + w52Str + '</td>' +
+      '<td>' + momoBar(v.momo) + '</td>' +
+      '<td><span class="v-pill v-' + v.cls + '">' + esc(v.label) + '</span>' + noteHtml + '</td>' +
+      '<td>' + tpSlHtml + '</td>' +
+    '</tr>';
+  }
+
+  function beep() {
+    try {
+      var ctx = new (window.AudioContext || window.webkitAudioContext)();
+      var o = ctx.createOscillator();
+      var g = ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.type = 'sine';
+      o.frequency.value = 880;
+      g.gain.value = 0.08;
+      o.start();
+      o.frequency.exponentialRampToValueAtTime(1760, ctx.currentTime + 0.15);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+      o.stop(ctx.currentTime + 0.3);
+    } catch (e) {}
+  }
+
+  function flashNewEnters(rows) {
+    if (!soundEl || !soundEl.checked) return;
+    var prev = JSON.parse(lsGet('scanner-prev-enters', '[]') || '[]');
+    var curr = rows.filter(function (s) { return computeVerdict(s).type === 'enter'; })
+                   .map(function (s) { return s.symbol; });
+    var newOnes = curr.filter(function (sym) { return prev.indexOf(sym) === -1; });
+    if (newOnes.length && prev.length) {
+      beep();
+      setStatus('🚀 إشارة دخول جديدة: ' + newOnes.join(', '), 'text-success');
+    }
+    lsSet('scanner-prev-enters', JSON.stringify(curr));
+  }
+
+  function renderTopMovers(rows) {
+    if (!topMovers || !rows.length) { if(topMovers) topMovers.innerHTML=''; return; }
+    var sorted = rows.slice().sort(function (a, b) {
+      return (num(b.changePct) || 0) - (num(a.changePct) || 0);
+    });
+    var gainers = sorted.slice(0, 5);
+    var highRvol = rows.slice().sort(function (a, b) {
+      return computeVerdict(b).momo - computeVerdict(a).momo;
+    }).slice(0, 5);
+
+    function itemHtml(s) {
+      var chg = num(s.changePct) || 0;
+      var cls = chg >= 0 ? 'up' : 'down';
+      var p = num(s.price);
+      var dec = (p != null && p < 1) ? 4 : 2;
+      return '<div class="mover-item" data-symbol="' + esc(s.symbol) + '">' +
+        '<div><b class="text-primary">' + esc(s.symbol) + '</b> <small class="text-body-secondary ms-1">$' + fmt(p, dec) + '</small></div>' +
+        '<span class="fw-bold ' + cls + '" dir="ltr">' + (chg >= 0 ? '+' : '') + fmt(chg, 2) + '%</span>' +
+      '</div>';
+    }
+
+    topMovers.innerHTML =
+      '<div class="p-2 border rounded bg-body-tertiary">' +
+        '<div class="small fw-bold mb-2">🚀 الأعلى صعوداً في الفلتر (Top Gainers)</div>' +
+        gainers.map(itemHtml).join('') +
+      '</div>' +
+      '<div class="p-2 border rounded bg-body-tertiary">' +
+        '<div class="small fw-bold mb-2">🔥 الأقوى زخماً (Top MOMO Score)</div>' +
+        highRvol.map(itemHtml).join('') +
+      '</div>';
+  }
+
+  // Select stock from Scanner to Calculator & Cache
+  function selectStockFromScanner(sym) {
+    var row = lastScannedRows.find(function(r) { return r.symbol === sym; });
+    $('sym').value = sym;
+    if (row) {
+      var price = num(row.price);
+      var chg = num(row.changePct);
+      var pc = num(row.previousClose || row.prevClose);
+      if (pc == null && price != null && chg != null) {
+        pc = price / (1 + (chg / 100));
+      }
+      var v = computeVerdict(row);
+      var stockData = {
+        sym: row.symbol,
+        name: row.name || '',
+        activity: row.sector || row.industry || 'مدرج في الاسكانر',
+        price: price,
+        pc: pc,
+        chg: chg,
+        vol: num(row.volume),
+        floatShares: num(row.floatShares),
+        floatPct: num(row.floatPct),
+        mc: num(row.marketCap),
+        bid: null,
+        ask: null
+      };
+      renderQuoteCard(stockData);
+      saveStockToCache(stockData);
+      if (price > 0) {
+        $('buy').value = price;
+        if (v.tp1) $('sell').value = Number(v.tp1.toFixed(price < 1 ? 4 : 2));
+        calc();
+      }
+      $('calcSection').scrollIntoView({ behavior: 'smooth' });
+      // Also trigger background fetch for exact Bid/Ask & sector if needed
+      $('get').click();
+    } else {
+      $('get').click();
+      $('calcSection').scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
+  tbody.addEventListener('click', function(e) {
+    var tr = e.target.closest('tr[data-symbol]');
+    if (tr) selectStockFromScanner(tr.getAttribute('data-symbol'));
+  });
+  if (topMovers) {
+    topMovers.addEventListener('click', function(e) {
+      var item = e.target.closest('[data-symbol]');
+      if (item) selectStockFromScanner(item.getAttribute('data-symbol'));
+    });
+  }
+
+  var scanning = false;
+  var autoTimer = null;
+
+  function getWorkerBase() {
+    var apiInput = $('api');
+    var b = (apiInput && apiInput.value ? apiInput.value : '').trim().replace(/\/+$/, '');
+    if (!b) b = 'https://small-disk-18d3stock-proxy.osamaanit.workers.dev';
+    if (!/^https?:\/\//i.test(b)) b = 'https://' + b;
+    return b;
+  }
+
+  function doScan() {
+    if (scanning) return;
+    scanning = true;
+    scanBtn.disabled = true;
+    setStatus('⏳ جاري مسح السوق...', 'text-warning');
+
+    var body = {
+      filters: buildApiFilters(),
+      sort: buildSort(),
+      range: [0, parseInt(fLimit.value, 10) || 50]
+    };
+
+    fetch(getWorkerBase() + '/scan', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    })
+    .then(function (r) {
+      return r.json().then(function (j) {
+        if (!r.ok || !j || !j.ok) throw new Error((j && j.error) || ('HTTP ' + r.status));
+        return j.data || [];
+      });
+    })
+    .then(function (results) {
+      lastScannedRows = results;
+      var vFilter = fVerdict ? fVerdict.value : '';
+      var filtered = vFilter
+        ? results.filter(function (s) { return computeVerdict(s).type === vFilter; })
+        : results;
+
+      filtered.sort(function (a, b) {
+        return computeVerdict(b).momo - computeVerdict(a).momo;
+      });
+
+      renderTable(filtered);
+      renderTopMovers(results);
+      flashNewEnters(results);
+
+      var now = new Date();
+      if (lastUpdate) lastUpdate.textContent = pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
+      if (countEl) countEl.textContent = filtered.length + ' / ' + results.length;
+      setStatus('✅ تم جلب ' + filtered.length + ' سهم', 'text-success');
+    })
+    .catch(function (e) {
+      setStatus('❌ ' + (e.message || 'فشل الاتصال بالـ Worker'), 'text-danger');
+    })
+    .finally(function () {
+      scanning = false;
+      scanBtn.disabled = false;
+    });
+  }
+
+  function renderTable(rows) {
+    if (!rows.length) {
+      tbody.innerHTML = '<tr><td colspan="13" class="text-center py-4 text-body-secondary">لا توجد أسهم مطابقة حالياً — جرّب تقليل شرط الـ RVOL أو التغيّر%</td></tr>';
+      return;
+    }
+    tbody.innerHTML = rows.map(renderRow).join('');
+  }
+
+  function startAuto() {
+    stopAuto();
+    if (!autoEl || !autoEl.checked) return;
+    autoTimer = setInterval(doScan, 5000);
+  }
+  function stopAuto() {
+    if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
+  }
+
+  if (autoEl) autoEl.addEventListener('change', function () {
+    if (autoEl.checked) startAuto(); else stopAuto();
+  });
+
+  scanBtn.addEventListener('click', doScan);
+  if (stopBtn) stopBtn.addEventListener('click', function () {
+    if (autoEl) autoEl.checked = false;
+    stopAuto();
+    setStatus('⏸️ متوقف', 'text-body-secondary');
+  });
+
+  [fPriceMin, fPriceMax, fVolumeMin, fCapMin, fChangeMin, fRvolMin, fMarket, fLimit, fVerdict, fSort]
+    .forEach(function (el) {
+      if (el) el.addEventListener('change', function () { doScan(); });
+    });
+
+  if (resetBtn) resetBtn.addEventListener('click', function () {
+    fPriceMin.value = '0.01';
+    fPriceMax.value = '25';
+    fVolumeMin.value = '250000';
+    fCapMin.value = '0';
+    fChangeMin.value = '2';
+    fRvolMin.value = '1.2';
+    fMarket.value = 'all';
+    fLimit.value = '50';
+    if (fVerdict) fVerdict.value = '';
+    if (fSort) fSort.value = 'change';
+    saveFilters();
+    doScan();
+  });
+
+  doScan();
+  if (autoEl && autoEl.checked) startAuto();
+})();
+</script>
+</body>
 </html>
