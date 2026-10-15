@@ -481,6 +481,6 @@ body {
   .container-sm,
   .container-xl,
   .container-xxl {
-    max-width: 1750;
+    max-width: 1750px;
   }
 }
