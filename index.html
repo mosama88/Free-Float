@@ -41,10 +41,17 @@
 
         <!-- Right Group: Action Buttons -->
         <div class="d-flex flex-wrap align-items-center gap-2">
+          <!-- ضع هذا الزر في الهيدر أو بجانب عنوان الاسكانر في الصفحة الرئيسية -->
+          <a href="news.html" class="btn btn-sm fw-bold"
+            style="background: linear-gradient(135deg, #dc2626, #ea580c); color: #fff; border: 1px solid #fde047; box-shadow: 0 0 15px rgba(234,88,12,0.5); padding: 6px 14px; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+            <span>⚡ رادار الأخبار والخبطات العاجلة (Catalyst News)</span>
+            <span
+              style="background: #000; color: #fde047; font-size: 10px; padding: 1px 6px; border-radius: 4px;">LIVE</span>
+          </a>
           <a href="#chartSection" class="btn btn-sm btn-outline-info fw-semibold">📊 الشارت</a>
           <a href="#calcSection" class="btn btn-sm btn-outline-primary fw-semibold">🧮 الحاسبة</a>
           <a href="#scannerSection" class="btn btn-sm btn-primary fw-semibold">📡 الاسكانر (0.01$ - 25$)</a>
-          <a href="stock-fetcher.html" class="btn btn-sm btn-outline-secondary">📈 Stock Fetcher</a>
+          <a href="index.html" class="btn btn-sm btn-outline-secondary">📈 Stock Fetcher</a>
           <button type="button" id="themeToggle" class="btn btn-sm btn-secondary" title="تبديل المظهر">
             🌓
           </button>
@@ -153,9 +160,8 @@
           <div class="col-sm-6 col-md-5">
             <label for="sym" class="form-label small text-body-secondary mb-1">رمز السهم (يبقى في الكاش حتى تضغط
               مسح)</label>
-            <input type="text" class="form-control text-uppercase fs-6 fw-bold" id="sym"
-              placeholder="EX: AAPL أو MULN" dir="ltr" pattern="[A-Za-z0-9]+"
-              oninput="this.value = this.value.replace(/[^a-zA-Z0-9]/g, '')"
+            <input type="text" class="form-control text-uppercase fs-6 fw-bold" id="sym" placeholder="EX: AAPL أو MULN"
+              dir="ltr" pattern="[A-Za-z0-9]+" oninput="this.value = this.value.replace(/[^a-zA-Z0-9]/g, '')"
               style="background-color: #287a74; color: #e0d5cc" />
           </div>
           <div class="col-auto">
