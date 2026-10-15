@@ -2,38 +2,40 @@
 <html lang="ar" dir="rtl" data-bs-theme="dark">
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <link href="assets/img/logo.ico" rel="icon" type="image/x-icon">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <link href="assets/img/logo.ico" rel="icon" type="image/x-icon" />
   <title>مواعيد البورصات + حاسبة الأرباح + ماسح الأسهم الفوري</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap">
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" />
   <!-- Bootstrap 5.3.3 RTL CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" />
 
-  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/style.css" />
 </head>
 
 <body>
-
   <div class="container py-3">
-
     <!-- Header -->
-    <header class="pb-3 mb-3 border-bottom">
+    <header class="pb-3 mb-3 border-bottom sticky-top bg-body pt-3">
       <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3">
-        
         <!-- Left Group: Logo, Brand Name & Title -->
         <div class="d-flex align-items-center gap-3">
-          <img src="assets/img/logo.png" alt="Logo" width="48" height="48" class="flex-shrink-0">
+          <img src="assets/img/logo.png" alt="Logo" width="48" height="48" class="flex-shrink-0" />
           <div>
             <div class="d-flex align-items-center gap-2 mb-1">
               <h3 class="h5 fw-bold mb-0 text-primary">OsInfoTrading</h3>
               <span class="text-muted">|</span>
-              <h1 class="h6 fw-bold mb-0">⏰ مواعيد البورصات + حاسبة الأرباح + اسكانر الأسهم</h1>
+              <h1 class="h6 fw-bold mb-0">
+                ⏰ مواعيد البورصات + حاسبة الأرباح + اسكانر الأسهم
+              </h1>
             </div>
-            <p class="text-body-secondary small mb-0">تحديث تلقائي للتوقيت، حفظ السهم في الكاش، مع ماسح فوري للأسهم من سنتات إلى 25 دولار.</p>
+            <p class="text-body-secondary small mb-0">
+              تحديث تلقائي للتوقيت، حفظ السهم في الكاش، مع ماسح فوري للأسهم من
+              سنتات إلى 25 دولار.
+            </p>
           </div>
         </div>
 
@@ -43,9 +45,10 @@
           <a href="#calcSection" class="btn btn-sm btn-outline-primary fw-semibold">🧮 الحاسبة</a>
           <a href="#scannerSection" class="btn btn-sm btn-primary fw-semibold">📡 الاسكانر (0.01$ - 25$)</a>
           <a href="stock-fetcher.html" class="btn btn-sm btn-outline-secondary">📈 Stock Fetcher</a>
-          <button type="button" id="themeToggle" class="btn btn-sm btn-secondary" title="تبديل المظهر">🌓</button>
+          <button type="button" id="themeToggle" class="btn btn-sm btn-secondary" title="تبديل المظهر">
+            🌓
+          </button>
         </div>
-
       </div>
     </header>
 
@@ -54,11 +57,15 @@
       <div class="card-body">
         <div class="row g-4 align-items-center">
           <div class="col-md-6 border-end-md">
-            <div class="text-body-secondary small">القاهرة <span id="tzc"></span></div>
+            <div class="text-body-secondary small">
+              القاهرة <span id="tzc"></span>
+            </div>
             <div class="big-clock my-1" id="clockC">--:--:--</div>
             <div class="text-body-secondary small" id="dateC"></div>
-            <div class="text-body-secondary small mt-2">نيويورك: <b id="clockN" dir="ltr">--:--</b> <span
-                id="tzn"></span></div>
+            <div class="text-body-secondary small mt-2">
+              نيويورك: <b id="clockN" dir="ltr">--:--</b>
+              <span id="tzn"></span>
+            </div>
           </div>
           <div class="col-md-6">
             <div class="h5 fw-bold d-flex align-items-center gap-2 mb-1">
@@ -75,16 +82,18 @@
     <!-- 24H Map -->
     <section class="card shadow-sm mb-3">
       <div class="card-body">
-        <h2 class="h6 fw-bold mb-2">🗺️ خريطة اليوم بتوقيت القاهرة (24 ساعة)</h2>
+        <h2 class="h6 fw-bold mb-2">
+          🗺️ خريطة اليوم بتوقيت القاهرة (24 ساعة)
+        </h2>
         <div class="tl" id="tl" role="img" aria-label="الجلسات الأمريكية على مدار اليوم بتوقيت القاهرة"></div>
         <div class="d-flex justify-content-between text-body-secondary small mt-1" dir="ltr">
           <span>00</span><span>03</span><span>06</span><span>09</span><span>12</span><span>15</span><span>18</span><span>21</span><span>24</span>
         </div>
         <div class="lg d-flex flex-wrap gap-3 mt-2 small">
-          <span style="--c:var(--pre)">Pre-Market</span>
-          <span style="--c:var(--reg)">Official session</span>
-          <span style="--c:var(--post)">After Hour</span>
-          <span style="--c:var(--bs-emphasis-color)">Now</span>
+          <span style="--c: var(--pre)">Pre-Market</span>
+          <span style="--c: var(--reg)">Official session</span>
+          <span style="--c: var(--post)">After Hour</span>
+          <span style="--c: var(--bs-emphasis-color)">Now</span>
         </div>
       </div>
     </section>
@@ -99,49 +108,71 @@
         <div class="d-flex flex-wrap align-items-center gap-2">
           <!-- Timeframe Quick Selector -->
           <div class="btn-group btn-group-sm" role="group" aria-label="الفريم الزمني" dir="ltr">
-            <button type="button" class="btn btn-outline-secondary chart-tf" data-tf="1">1m</button>
-            <button type="button" class="btn btn-outline-secondary chart-tf active" data-tf="5">5m</button>
-            <button type="button" class="btn btn-outline-secondary chart-tf" data-tf="15">15m</button>
-            <button type="button" class="btn btn-outline-secondary chart-tf" data-tf="60">1H</button>
-            <button type="button" class="btn btn-outline-secondary chart-tf" data-tf="D">1D</button>
+            <button type="button" class="btn btn-outline-secondary chart-tf" data-tf="1">
+              1m
+            </button>
+            <button type="button" class="btn btn-outline-secondary chart-tf active" data-tf="5">
+              5m
+            </button>
+            <button type="button" class="btn btn-outline-secondary chart-tf" data-tf="15">
+              15m
+            </button>
+            <button type="button" class="btn btn-outline-secondary chart-tf" data-tf="60">
+              1H
+            </button>
+            <button type="button" class="btn btn-outline-secondary chart-tf" data-tf="D">
+              1D
+            </button>
           </div>
-          <a href="#" id="tvExternalLink" target="_blank" rel="noopener" class="btn btn-sm btn-outline-info">🔗 فتح في TradingView</a>
-          <button type="button" class="btn btn-sm btn-outline-secondary" id="toggleChartBtn">🔼 طي الشارت</button>
+          <a href="#" id="tvExternalLink" target="_blank" rel="noopener" class="btn btn-sm btn-outline-info">🔗 فتح في
+            TradingView</a>
+          <button type="button" class="btn btn-sm btn-outline-secondary" id="toggleChartBtn">
+            🔼 طي الشارت
+          </button>
         </div>
       </div>
       <div class="card-body p-0" id="chartCardBody">
-        <div id="tv_chart_container" style="height: 520px; width: 100%;"></div>
+        <div id="tv_chart_container" style="height: 520px; width: 100%"></div>
       </div>
     </section>
 
     <!-- Calculator & Cached Stock Data Section -->
     <section class="card shadow-sm mb-3 border-primary border-opacity-50" id="calcSection">
       <div class="card-header bg-transparent d-flex flex-wrap justify-content-between align-items-center gap-2">
-        <h2 class="h5 fw-bold mb-0">🧮 حاسبة الأرباح وبيانات السهم (محفوظة في الكاش)</h2>
+        <h2 class="h5 fw-bold mb-0">
+          🧮 حاسبة الأرباح وبيانات السهم (محفوظة في الكاش)
+        </h2>
         <span class="badge bg-secondary" id="cacheBadge" hidden>💾 محفوظ في الكاش</span>
       </div>
       <div class="card-body">
-
         <!-- Search & Clear Row -->
         <div class="row g-2 align-items-end mb-3">
           <div class="col-sm-6 col-md-5">
             <label for="sym" class="form-label small text-body-secondary mb-1">رمز السهم (يبقى في الكاش حتى تضغط
               مسح)</label>
-            <input type="text" class="form-control text-uppercase" id="sym" placeholder="مثال: AAPL أو MULN" dir="ltr">
+            <input type="text" class="form-control text-uppercase fs-5 fw-bold" id="sym"
+              placeholder="EX: AAPL أو MULN" dir="ltr" pattern="[A-Za-z0-9]+"
+              oninput="this.value = this.value.replace(/[^a-zA-Z0-9]/g, '')"
+              style="background-color: #287a74; color: #e0d5cc" />
           </div>
           <div class="col-auto">
-            <button type="button" class="btn btn-primary fw-semibold" id="get">🔍 هات السعر والبيانات</button>
+            <button type="button" class="btn btn-primary fw-semibold" id="get">
+              🔍 هات السعر والبيانات
+            </button>
           </div>
           <div class="col-auto">
-            <button type="button" class="btn btn-outline-danger fw-semibold" id="clearCache">🗑️ مسح بيانات السهم
-              (Clear)</button>
+            <button type="button" class="btn btn-outline-danger fw-semibold" id="clearCache">
+              🗑️ مسح بيانات السهم (Clear)
+            </button>
           </div>
-          <div class="col-12 mt-2">
+          <div class="col-12 mt-2" hidden>
             <details>
-              <summary class="small text-body-secondary" style="cursor:pointer">⚙️ إعدادات رابط الـ Worker API</summary>
+              <summary class="small text-body-secondary" style="cursor: pointer">
+                ⚙️ إعدادات رابط الـ Worker API
+              </summary>
               <div class="mt-2">
                 <input type="text" class="form-control form-control-sm" id="api"
-                  value="https://small-disk-18d3stock-proxy.osamaanit.workers.dev" dir="ltr">
+                  value="https://small-disk-18d3stock-proxy.osamaanit.workers.dev" dir="ltr" readonly />
               </div>
             </details>
           </div>
@@ -154,11 +185,11 @@
         <div class="row g-3 mb-3">
           <div class="col-6 col-md-3">
             <label for="buy" class="form-label small text-body-secondary">سعر الشراء ($)</label>
-            <input type="number" class="form-control" id="buy" step="any" min="0" dir="ltr">
+            <input type="number" class="form-control" id="buy" step="any" min="0" dir="ltr" />
           </div>
           <div class="col-6 col-md-3">
             <label for="sell" class="form-label small text-body-secondary">سعر البيع ($)</label>
-            <input type="number" class="form-control" id="sell" step="any" min="0" dir="ltr">
+            <input type="number" class="form-control" id="sell" step="any" min="0" dir="ltr" />
           </div>
           <div class="col-6 col-md-3">
             <label for="mode" class="form-label small text-body-secondary">احسب على أساس</label>
@@ -169,22 +200,30 @@
           </div>
           <div class="col-6 col-md-3" id="bw">
             <label for="budget" class="form-label small text-body-secondary">المبلغ ($)</label>
-            <input type="number" class="form-control" id="budget" step="any" min="0" value="100" dir="ltr">
+            <input type="number" class="form-control" id="budget" step="any" min="0" value="100" dir="ltr" />
           </div>
           <div class="col-6 col-md-3" id="sw" hidden>
             <label for="shares" class="form-label small text-body-secondary">عدد الأسهم</label>
-            <input type="number" class="form-control" id="shares" step="any" min="0" value="10" dir="ltr">
+            <input type="number" class="form-control" id="shares" step="any" min="0" value="10" dir="ltr" />
           </div>
         </div>
 
         <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
           <span class="small text-body-secondary">مبالغ سريعة:</span>
-          <button class="btn btn-sm btn-outline-secondary" type="button" data-b="50">$50</button>
-          <button class="btn btn-sm btn-outline-secondary" type="button" data-b="100">$100</button>
-          <button class="btn btn-sm btn-outline-secondary" type="button" data-b="500">$500</button>
-          <button class="btn btn-sm btn-outline-secondary" type="button" data-b="1000">$1000</button>
+          <button class="btn btn-sm btn-outline-secondary" type="button" data-b="50">
+            $50
+          </button>
+          <button class="btn btn-sm btn-outline-secondary" type="button" data-b="100">
+            $100
+          </button>
+          <button class="btn btn-sm btn-outline-secondary" type="button" data-b="500">
+            $500
+          </button>
+          <button class="btn btn-sm btn-outline-secondary" type="button" data-b="1000">
+            $1000
+          </button>
           <div class="form-check ms-auto">
-            <input class="form-check-input" type="checkbox" id="frac" checked>
+            <input class="form-check-input" type="checkbox" id="frac" checked />
             <label class="form-check-label small" for="frac">أسهم كسرية</label>
           </div>
         </div>
@@ -192,19 +231,19 @@
         <div class="row g-2 mb-3">
           <div class="col-6 col-md-3">
             <label for="fbf" class="form-label small text-body-secondary">عمولة الشراء ثابتة ($)</label>
-            <input type="number" class="form-control form-control-sm" id="fbf" step="any" min="0" value="0" dir="ltr">
+            <input type="number" class="form-control form-control-sm" id="fbf" step="any" min="0" value="0" dir="ltr" />
           </div>
           <div class="col-6 col-md-3">
             <label for="fbp" class="form-label small text-body-secondary">عمولة الشراء (%)</label>
-            <input type="number" class="form-control form-control-sm" id="fbp" step="any" min="0" value="0" dir="ltr">
+            <input type="number" class="form-control form-control-sm" id="fbp" step="any" min="0" value="0" dir="ltr" />
           </div>
           <div class="col-6 col-md-3">
             <label for="fsf" class="form-label small text-body-secondary">عمولة البيع ثابتة ($)</label>
-            <input type="number" class="form-control form-control-sm" id="fsf" step="any" min="0" value="0" dir="ltr">
+            <input type="number" class="form-control form-control-sm" id="fsf" step="any" min="0" value="0" dir="ltr" />
           </div>
           <div class="col-6 col-md-3">
             <label for="fsp" class="form-label small text-body-secondary">عمولة البيع (%)</label>
-            <input type="number" class="form-control form-control-sm" id="fsp" step="any" min="0" value="0" dir="ltr">
+            <input type="number" class="form-control form-control-sm" id="fsp" step="any" min="0" value="0" dir="ltr" />
           </div>
         </div>
 
@@ -231,16 +270,19 @@
     <section class="card shadow-sm mb-3 border-success border-opacity-50" id="scannerSection">
       <div class="card-header bg-transparent d-flex flex-wrap justify-content-between align-items-center gap-2">
         <div>
-          <h2 class="h5 fw-bold mb-0">📡 اسكانر الأسهم الفوري — لوحات متعددة (من $0.01 إلى $25)</h2>
-          <small class="text-body-secondary">19 لوحة تتحدّث معاً — اضغط على أي سهم لفتح الشارت الفوري وإرساله إلى الحاسبة</small>
+          <h2 class="h5 fw-bold mb-0">
+            📡 اسكانر الأسهم الفوري — لوحات متعددة (من $0.01 إلى $25)
+          </h2>
+          <small class="text-body-secondary">19 لوحة تتحدّث معاً — اضغط على أي سهم لفتح الشارت الفوري وإرساله
+            إلى الحاسبة</small>
         </div>
         <div class="d-flex flex-wrap align-items-center gap-3">
           <div class="form-check form-switch mb-0">
-            <input class="form-check-input" type="checkbox" id="scannerAuto">
+            <input class="form-check-input" type="checkbox" id="scannerAuto" />
             <label class="form-check-label small" for="scannerAuto">تحديث تلقائي (8ث)</label>
           </div>
           <div class="form-check form-switch mb-0">
-            <input class="form-check-input" type="checkbox" id="scannerSound" checked>
+            <input class="form-check-input" type="checkbox" id="scannerSound" checked />
             <label class="form-check-label small" for="scannerSound">🔔 تنبيه صوتي</label>
           </div>
         </div>
@@ -250,14 +292,18 @@
         <!-- Quick Price Presets -->
         <div class="d-flex flex-wrap align-items-center gap-2 mb-3 pb-2 border-bottom">
           <span class="small text-body-secondary fw-semibold">فلاتر سريعة للسعر:</span>
-          <button type="button" class="btn btn-sm btn-outline-primary preset-price" data-min="0.01" data-max="25">🎯
-            سنتات إلى $25 (الافتراضي)</button>
-          <button type="button" class="btn btn-sm btn-outline-warning preset-price" data-min="0.01" data-max="1">🪙 أسهم
-            السنتات (أقل من $1)</button>
-          <button type="button" class="btn btn-sm btn-outline-info preset-price" data-min="1" data-max="5">🔥 من $1 إلى
-            $5</button>
-          <button type="button" class="btn btn-sm btn-outline-success preset-price" data-min="5" data-max="25">💎 من $5
-            إلى $25</button>
+          <button type="button" class="btn btn-sm btn-outline-primary preset-price" data-min="0.01" data-max="25">
+            🎯 سنتات إلى $25 (الافتراضي)
+          </button>
+          <button type="button" class="btn btn-sm btn-outline-warning preset-price" data-min="0.01" data-max="1">
+            🪙 أسهم السنتات (أقل من $1)
+          </button>
+          <button type="button" class="btn btn-sm btn-outline-info preset-price" data-min="1" data-max="5">
+            🔥 من $1 إلى $5
+          </button>
+          <button type="button" class="btn btn-sm btn-outline-success preset-price" data-min="5" data-max="25">
+            💎 من $5 إلى $25
+          </button>
         </div>
 
         <!-- Filter Controls -->
@@ -265,32 +311,32 @@
           <div class="col-6 col-sm-4 col-md-2">
             <label class="form-label small text-body-secondary mb-1">أقل سعر ($)</label>
             <input type="number" class="form-control form-control-sm" id="filterPriceMin" value="0.01" step="0.01"
-              min="0" dir="ltr">
+              min="0" dir="ltr" />
           </div>
           <div class="col-6 col-sm-4 col-md-2">
             <label class="form-label small text-body-secondary mb-1">أعلى سعر ($)</label>
             <input type="number" class="form-control form-control-sm" id="filterPriceMax" value="25" step="0.5" min="0"
-              dir="ltr">
+              dir="ltr" />
           </div>
           <div class="col-6 col-sm-4 col-md-2">
             <label class="form-label small text-body-secondary mb-1">أقل فوليوم</label>
             <input type="number" class="form-control form-control-sm" id="filterVolumeMin" value="250000" step="50000"
-              min="0" dir="ltr">
+              min="0" dir="ltr" />
           </div>
           <div class="col-6 col-sm-4 col-md-2">
             <label class="form-label small text-body-secondary mb-1">أقل تغيّر (%) — للجدول</label>
             <input type="number" class="form-control form-control-sm" id="filterChangeMin" value="2" step="0.5"
-              dir="ltr">
+              dir="ltr" />
           </div>
           <div class="col-6 col-sm-4 col-md-2">
             <label class="form-label small text-body-secondary mb-1">أقل RVOL — للجدول</label>
             <input type="number" class="form-control form-control-sm" id="filterRvolMin" value="1.2" step="0.1" min="0"
-              dir="ltr">
+              dir="ltr" />
           </div>
           <div class="col-6 col-sm-4 col-md-2">
             <label class="form-label small text-body-secondary mb-1">أقل Market Cap</label>
             <input type="number" class="form-control form-control-sm" id="filterMarketCapMin" value="0" step="1000000"
-              min="0" dir="ltr">
+              min="0" dir="ltr" />
           </div>
           <div class="col-6 col-sm-4 col-md-2">
             <label class="form-label small text-body-secondary mb-1">البورصة</label>
@@ -345,16 +391,21 @@
         <!-- Action Bar -->
         <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
           <div class="d-flex flex-wrap gap-2">
-            <button type="button" class="btn btn-success btn-sm fw-bold px-3" id="scannerBtn">🚀 امسح السوق
-              الآن</button>
-            <button type="button" class="btn btn-outline-secondary btn-sm" id="scannerStop">⏸️ إيقاف التلقائي</button>
-            <button type="button" class="btn btn-outline-warning btn-sm" id="scannerReset">🔄 استعادة افتراضي (0.01$ -
-              25$)</button>
+            <button type="button" class="btn btn-success btn-sm fw-bold px-3" id="scannerBtn">
+              🚀 امسح السوق الآن
+            </button>
+            <button type="button" class="btn btn-outline-secondary btn-sm" id="scannerStop">
+              ⏸️ إيقاف التلقائي
+            </button>
+            <button type="button" class="btn btn-outline-warning btn-sm" id="scannerReset">
+              🔄 استعادة افتراضي (0.01$ - 25$)
+            </button>
           </div>
           <div class="d-flex align-items-center gap-3 small">
             <span id="scannerStatus" class="fw-semibold">جاهز للمسح</span>
             <span class="text-body-secondary">العدد: <b id="scannerCount">0</b></span>
-            <span class="text-body-secondary">آخر تحديث: <b id="scannerLastUpdate" dir="ltr">--:--:--</b></span>
+            <span class="text-body-secondary">آخر تحديث:
+              <b id="scannerLastUpdate" dir="ltr">--:--:--</b></span>
           </div>
         </div>
 
@@ -363,7 +414,7 @@
 
         <!-- Detailed table -->
         <h3 class="h6 fw-bold mb-2">📋 الجدول التفصيلي (القرار + الأهداف)</h3>
-        <div class="table-responsive" style="max-height: 560px;">
+        <div class="table-responsive" style="max-height: 560px">
           <table class="table table-sm table-hover table-striped align-middle scanner-table mb-0">
             <thead class="sticky-top bg-body-tertiary">
               <tr>
@@ -384,7 +435,9 @@
             </thead>
             <tbody id="scannerRows">
               <tr>
-                <td colspan="13" class="text-center py-4 text-body-secondary">جاري تحميل الاسكانر...</td>
+                <td colspan="13" class="text-center py-4 text-body-secondary">
+                  جاري تحميل الاسكانر...
+                </td>
               </tr>
             </tbody>
           </table>
@@ -397,8 +450,10 @@
       <div class="col-lg-6">
         <section class="card shadow-sm h-100">
           <div class="card-body">
-            <h2 class="h6 fw-bold mb-2">🇺🇸 الجلسات الأمريكية <span class="text-body-secondary fw-normal small"
-                id="usDay"></span></h2>
+            <h2 class="h6 fw-bold mb-2">
+              🇺🇸 الجلسات الأمريكية
+              <span class="text-body-secondary fw-normal small" id="usDay"></span>
+            </h2>
             <div class="table-responsive">
               <table class="table table-sm align-middle mb-2">
                 <thead>
@@ -412,8 +467,10 @@
                 <tbody id="usRows"></tbody>
               </table>
             </div>
-            <p class="text-body-secondary small mb-0">Intraday يعني التداول جوه اليوم الواحد: بتشتري وتبيع قبل ما اليوم
-              يخلص.</p>
+            <p class="text-body-secondary small mb-0">
+              Intraday يعني التداول جوه اليوم الواحد: بتشتري وتبيع قبل ما
+              اليوم يخلص.
+            </p>
           </div>
         </section>
       </div>
@@ -421,7 +478,9 @@
       <div class="col-lg-6">
         <section class="card shadow-sm h-100">
           <div class="card-body">
-            <h2 class="h6 fw-bold mb-2">🌍 الأسواق العالمية بتوقيت القاهرة</h2>
+            <h2 class="h6 fw-bold mb-2">
+              🌍 الأسواق العالمية بتوقيت القاهرة
+            </h2>
             <div class="table-responsive">
               <table class="table table-sm align-middle mb-2">
                 <thead>
@@ -435,7 +494,9 @@
                 <tbody id="mkRows"></tbody>
               </table>
             </div>
-            <p class="text-body-secondary small mb-0">الأوقات للجلسة الأساسية فقط بدون احتساب استراحات الغداء الآسيوية.
+            <p class="text-body-secondary small mb-0">
+              الأوقات للجلسة الأساسية فقط بدون احتساب استراحات الغداء
+              الآسيوية.
             </p>
           </div>
         </section>
@@ -445,51 +506,63 @@
     <!-- Volatility Times -->
     <section class="card shadow-sm mb-3">
       <div class="card-body">
-        <h2 class="h6 fw-bold mb-3">🔥 إمتى الحركة والأرباح العالية؟ (وإمتى الخطر)</h2>
+        <h2 class="h6 fw-bold mb-3">
+          🔥 إمتى الحركة والأرباح العالية؟ (وإمتى الخطر)
+        </h2>
         <div class="row g-2">
           <div class="col-md-4">
             <div class="p-3 border border-success rounded-3 h-100">
-              <h3 class="h6 fw-bold mb-1">أول ساعة بعد الافتتاح</h3><b class="small text-success"
-                data-et="9:30-10:30"></b>
-              <p class="small text-body-secondary mb-0 mt-1">أعلى حجم تداول وحركة في اليوم. فرص أكبر، وخسارة أسرع كمان.
+              <h3 class="h6 fw-bold mb-1">أول ساعة بعد الافتتاح</h3>
+              <b class="small text-success" data-et="9:30-10:30"></b>
+              <p class="small text-body-secondary mb-0 mt-1">
+                أعلى حجم تداول وحركة في اليوم. فرص أكبر، وخسارة أسرع كمان.
               </p>
             </div>
           </div>
           <div class="col-md-4">
             <div class="p-3 border border-success rounded-3 h-100">
-              <h3 class="h6 fw-bold mb-1">تداخل لندن ونيويورك</h3><b class="small text-success"
-                data-et="9:30-11:30"></b>
-              <p class="small text-body-secondary mb-0 mt-1">سيولة قوية لأن سوقين كبار شغالين مع بعض.</p>
+              <h3 class="h6 fw-bold mb-1">تداخل لندن ونيويورك</h3>
+              <b class="small text-success" data-et="9:30-11:30"></b>
+              <p class="small text-body-secondary mb-0 mt-1">
+                سيولة قوية لأن سوقين كبار شغالين مع بعض.
+              </p>
             </div>
           </div>
           <div class="col-md-4">
             <div class="p-3 border border-success rounded-3 h-100">
-              <h3 class="h6 fw-bold mb-1">آخر ساعة قبل الإغلاق</h3><b class="small text-success"
-                data-et="15:00-16:00"></b>
-              <p class="small text-body-secondary mb-0 mt-1">الحجم بيرجع يزيد والمؤسسات بتقفل مراكزها، فالسعر بيتحرك
-                بقوة.</p>
+              <h3 class="h6 fw-bold mb-1">آخر ساعة قبل الإغلاق</h3>
+              <b class="small text-success" data-et="15:00-16:00"></b>
+              <p class="small text-body-secondary mb-0 mt-1">
+                الحجم بيرجع يزيد والمؤسسات بتقفل مراكزها، فالسعر بيتحرك بقوة.
+              </p>
             </div>
           </div>
           <div class="col-md-4">
             <div class="p-3 border rounded-3 h-100">
-              <h3 class="h6 fw-bold mb-1">منتصف اليوم (هدوء)</h3><b class="small text-body-secondary"
-                data-et="11:30-14:00"></b>
-              <p class="small text-body-secondary mb-0 mt-1">الحركة ضعيفة وغالباً مفيش اتجاه واضح. مش وقت مناسب للمبتدئ.
+              <h3 class="h6 fw-bold mb-1">منتصف اليوم (هدوء)</h3>
+              <b class="small text-body-secondary" data-et="11:30-14:00"></b>
+              <p class="small text-body-secondary mb-0 mt-1">
+                الحركة ضعيفة وغالباً مفيش اتجاه واضح. مش وقت مناسب للمبتدئ.
               </p>
             </div>
           </div>
           <div class="col-md-4">
             <div class="p-3 border border-danger rounded-3 h-100">
-              <h3 class="h6 fw-bold mb-1">Pre-Market</h3><b class="small text-danger" data-et="4:00-9:30"></b>
-              <p class="small text-body-secondary mb-0 mt-1">الأخبار بتحرك السهم، بس السيولة قليلة والـ Spread واسع.
-                استخدم Limit بس.</p>
+              <h3 class="h6 fw-bold mb-1">Pre-Market</h3>
+              <b class="small text-danger" data-et="4:00-9:30"></b>
+              <p class="small text-body-secondary mb-0 mt-1">
+                الأخبار بتحرك السهم، بس السيولة قليلة والـ Spread واسع. استخدم
+                Limit بس.
+              </p>
             </div>
           </div>
           <div class="col-md-4">
             <div class="p-3 border border-danger rounded-3 h-100">
-              <h3 class="h6 fw-bold mb-1">After Hour</h3><b class="small text-danger" data-et="16:00-20:00"></b>
-              <p class="small text-body-secondary mb-0 mt-1">نتايج الشركات بتنزل هنا غالباً فالسهم ممكن يقفز أو ينزل
-                فجأة.</p>
+              <h3 class="h6 fw-bold mb-1">After Hour</h3>
+              <b class="small text-danger" data-et="16:00-20:00"></b>
+              <p class="small text-body-secondary mb-0 mt-1">
+                نتايج الشركات بتنزل هنا غالباً فالسهم ممكن يقفز أو ينزل فجأة.
+              </p>
             </div>
           </div>
         </div>
@@ -502,45 +575,69 @@
         <h2 class="h6 fw-bold mb-3">📚 شرح للمبتدئ</h2>
         <div class="accordion accordion-flush" id="faqAcc">
           <div class="accordion-item">
-            <h2 class="accordion-header"><button class="accordion-button" type="button" data-bs-toggle="collapse"
-                data-bs-target="#f1">يعني إيه بورصة وسهم و Free Float؟</button></h2>
+            <h2 class="accordion-header">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#f1">
+                يعني إيه بورصة وسهم و Free Float؟
+              </button>
+            </h2>
             <div id="f1" class="accordion-collapse collapse show" data-bs-parent="#faqAcc">
-              <div class="accordion-body small text-body-secondary">البورصة سوق بيتباع فيه أجزاء من شركات. <b>الـ Free
-                  Float</b> هو عدد الأسهم الحرة المتاحة للتداول في السوق للجمهور (بدون أسهم المؤسسين المقيدة). لما يكون
-                الـ Float صغير (أقل من 20 مليون سهم) ودخلت سيولة عالية، السهم بيتحرك بسرعة صاروخية.</div>
+              <div class="accordion-body small text-body-secondary">
+                البورصة سوق بيتباع فيه أجزاء من شركات.
+                <b>الـ Free Float</b> هو عدد الأسهم الحرة المتاحة للتداول في
+                السوق للجمهور (بدون أسهم المؤسسين المقيدة). لما يكون الـ Float
+                صغير (أقل من 20 مليون سهم) ودخلت سيولة عالية، السهم بيتحرك
+                بسرعة صاروخية.
+              </div>
             </div>
           </div>
           <div class="accordion-item">
-            <h2 class="accordion-header"><button class="accordion-button collapsed" type="button"
-                data-bs-toggle="collapse" data-bs-target="#f2">الجلسات الأمريكية: Pre-Market وRegular
-                وAfter-Hours</button></h2>
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#f2">
+                الجلسات الأمريكية: Pre-Market وRegular وAfter-Hours
+              </button>
+            </h2>
             <div id="f2" class="accordion-collapse collapse" data-bs-parent="#faqAcc">
               <div class="accordion-body small text-body-secondary">
                 <ul>
-                  <li><b>Pre-Market:</b> من 4:00 لـ 9:30 صباحاً بتوقيت نيويورك. فيها أخبار وسيولة قليلة.</li>
-                  <li><b>Regular:</b> من 9:30 لـ 4:00 العصر. هي الجلسة الرئيسية وأعلى سيولة.</li>
-                  <li><b>After-Hours:</b> من 4:00 لـ 8:00 مساءً. بعد الإغلاق، وتقارير الأرباح بتنزل فيها.</li>
+                  <li>
+                    <b>Pre-Market:</b> من 4:00 لـ 9:30 صباحاً بتوقيت نيويورك.
+                    فيها أخبار وسيولة قليلة.
+                  </li>
+                  <li>
+                    <b>Regular:</b> من 9:30 لـ 4:00 العصر. هي الجلسة الرئيسية
+                    وأعلى سيولة.
+                  </li>
+                  <li>
+                    <b>After-Hours:</b> من 4:00 لـ 8:00 مساءً. بعد الإغلاق،
+                    وتقارير الأرباح بتنزل فيها.
+                  </li>
                 </ul>
               </div>
             </div>
           </div>
           <div class="accordion-item">
-            <h2 class="accordion-header"><button class="accordion-button collapsed" type="button"
-                data-bs-toggle="collapse" data-bs-target="#f3">سعر الشراء Ask وسعر البيع Bid والـ Spread</button></h2>
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#f3">
+                سعر الشراء Ask وسعر البيع Bid والـ Spread
+              </button>
+            </h2>
             <div id="f3" class="accordion-collapse collapse" data-bs-parent="#faqAcc">
-              <div class="accordion-body small text-body-secondary">Ask هو أقل سعر حد مستعد يبيعلك بيه، وBid هو أعلى سعر
-                حد مستعد يشتري منك بيه. الفرق بينهم هو الـ Spread وهو تكلفة مخفية بتزيد في أسهم السنتات وخارج الجلسة
-                الرسمية.</div>
+              <div class="accordion-body small text-body-secondary">
+                Ask هو أقل سعر حد مستعد يبيعلك بيه، وBid هو أعلى سعر حد مستعد
+                يشتري منك بيه. الفرق بينهم هو الـ Spread وهو تكلفة مخفية بتزيد
+                في أسهم السنتات وخارج الجلسة الرسمية.
+              </div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-<!-- Footer -->
+    <!-- Footer -->
     <footer class="mt-4 pt-3 border-top text-center">
       <p class="text-body-secondary small mb-2">
-        ⚠️ المحتوى تعليمي فقط وليس نصيحة استثمارية. الأسعار القادمة من الـ API قد تتأخر ثواني عن السعر اللحظي.
+        ⚠️ المحتوى تعليمي فقط وليس نصيحة استثمارية. الأسعار القادمة من الـ API
+        قد تتأخر ثواني عن السعر اللحظي.
       </p>
       <div class="d-flex flex-wrap justify-content-center align-items-center gap-2 small">
         <span class="text-body-secondary">صُمم وطُوّر بواسطة</span>
@@ -549,7 +646,8 @@
         <a href="tel:+201228759920" class="text-decoration-none text-body fw-semibold" dir="ltr">
           📞 +201228759920
         </a>
-        <a href="https://wa.me/201228759920" target="_blank" rel="noopener" class="badge bg-success text-decoration-none">
+        <a href="https://wa.me/201228759920" target="_blank" rel="noopener"
+          class="badge bg-success text-decoration-none">
           💬 واتساب
         </a>
         <span class="text-muted">|</span>
@@ -581,7 +679,6 @@
 
   <!-- 7. Live Chart (ملف الشارت المنفصل) -->
   <script src="assets/js/chart.js"></script>
-
 </body>
 
 </html>
