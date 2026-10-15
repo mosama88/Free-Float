@@ -4,6 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <link href="assets/img/logo.ico" rel="icon" type="image/x-icon">
   <title>مواعيد البورصات + حاسبة الأرباح + ماسح الأسهم الفوري</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,17 +21,31 @@
   <div class="container py-3">
 
     <!-- Header -->
-    <header class="d-flex flex-wrap justify-content-between align-items-center gap-3 pb-3 mb-3 border-bottom">
-      <div>
-        <h1 class="h4 fw-bold mb-1">⏰ مواعيد البورصات + حاسبة الأرباح + اسكانر الأسهم</h1>
-        <p class="text-body-secondary small mb-0">تحديث تلقائي للتوقيت، حفظ السهم في الكاش، مع ماسح فوري للأسهم من سنتات
-          إلى 25 دولار.</p>
-      </div>
-      <div class="d-flex flex-wrap align-items-center gap-2">
-        <a href="#calcSection" class="btn btn-sm btn-outline-primary fw-semibold">🧮 الحاسبة</a>
-        <a href="#scannerSection" class="btn btn-sm btn-primary fw-semibold">📡 الاسكانر (0.01$ - 25$)</a>
-        <a href="stock-fetcher.html" class="btn btn-sm btn-outline-secondary">📈 Stock Fetcher</a>
-        <button type="button" id="themeToggle" class="btn btn-sm btn-secondary" title="تبديل المظهر">🌓</button>
+    <header class="pb-3 mb-3 border-bottom">
+      <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3">
+        
+        <!-- Left Group: Logo, Brand Name & Title -->
+        <div class="d-flex align-items-center gap-3">
+          <img src="assets/img/logo.png" alt="Logo" width="48" height="48" class="flex-shrink-0">
+          <div>
+            <div class="d-flex align-items-center gap-2 mb-1">
+              <h3 class="h5 fw-bold mb-0 text-primary">OsInfoTrading</h3>
+              <span class="text-muted">|</span>
+              <h1 class="h6 fw-bold mb-0">⏰ مواعيد البورصات + حاسبة الأرباح + اسكانر الأسهم</h1>
+            </div>
+            <p class="text-body-secondary small mb-0">تحديث تلقائي للتوقيت، حفظ السهم في الكاش، مع ماسح فوري للأسهم من سنتات إلى 25 دولار.</p>
+          </div>
+        </div>
+
+        <!-- Right Group: Action Buttons -->
+        <div class="d-flex flex-wrap align-items-center gap-2">
+          <a href="#chartSection" class="btn btn-sm btn-outline-info fw-semibold">📊 الشارت</a>
+          <a href="#calcSection" class="btn btn-sm btn-outline-primary fw-semibold">🧮 الحاسبة</a>
+          <a href="#scannerSection" class="btn btn-sm btn-primary fw-semibold">📡 الاسكانر (0.01$ - 25$)</a>
+          <a href="stock-fetcher.html" class="btn btn-sm btn-outline-secondary">📈 Stock Fetcher</a>
+          <button type="button" id="themeToggle" class="btn btn-sm btn-secondary" title="تبديل المظهر">🌓</button>
+        </div>
+
       </div>
     </header>
 
@@ -71,6 +86,31 @@
           <span style="--c:var(--post)">After Hour</span>
           <span style="--c:var(--bs-emphasis-color)">Now</span>
         </div>
+      </div>
+    </section>
+
+    <!-- LIVE INTERACTIVE CHART SECTION -->
+    <section class="card shadow-sm mb-3 border-info border-opacity-50" id="chartSection" hidden>
+      <div class="card-header bg-transparent d-flex flex-wrap justify-content-between align-items-center gap-2">
+        <div class="d-flex align-items-center gap-2">
+          <h2 class="h5 fw-bold mb-0">📊 الشارت اللحظي المباشر</h2>
+          <span class="badge bg-info text-dark fs-6" id="chartSymbolBadge" dir="ltr">AAPL</span>
+        </div>
+        <div class="d-flex flex-wrap align-items-center gap-2">
+          <!-- Timeframe Quick Selector -->
+          <div class="btn-group btn-group-sm" role="group" aria-label="الفريم الزمني" dir="ltr">
+            <button type="button" class="btn btn-outline-secondary chart-tf" data-tf="1">1m</button>
+            <button type="button" class="btn btn-outline-secondary chart-tf active" data-tf="5">5m</button>
+            <button type="button" class="btn btn-outline-secondary chart-tf" data-tf="15">15m</button>
+            <button type="button" class="btn btn-outline-secondary chart-tf" data-tf="60">1H</button>
+            <button type="button" class="btn btn-outline-secondary chart-tf" data-tf="D">1D</button>
+          </div>
+          <a href="#" id="tvExternalLink" target="_blank" rel="noopener" class="btn btn-sm btn-outline-info">🔗 فتح في TradingView</a>
+          <button type="button" class="btn btn-sm btn-outline-secondary" id="toggleChartBtn">🔼 طي الشارت</button>
+        </div>
+      </div>
+      <div class="card-body p-0" id="chartCardBody">
+        <div id="tv_chart_container" style="height: 520px; width: 100%;"></div>
       </div>
     </section>
 
@@ -188,13 +228,11 @@
     </section>
 
     <!-- PRO GLOBAL SCANNER ($0.01 to $25) -->
-
     <section class="card shadow-sm mb-3 border-success border-opacity-50" id="scannerSection">
       <div class="card-header bg-transparent d-flex flex-wrap justify-content-between align-items-center gap-2">
         <div>
           <h2 class="h5 fw-bold mb-0">📡 اسكانر الأسهم الفوري — لوحات متعددة (من $0.01 إلى $25)</h2>
-          <small class="text-body-secondary">19 لوحة تتحدّث معاً — اضغط على أي سهم لإرساله فوراً إلى الحاسبة وحفظه في
-            الكاش</small>
+          <small class="text-body-secondary">19 لوحة تتحدّث معاً — اضغط على أي سهم لفتح الشارت الفوري وإرساله إلى الحاسبة</small>
         </div>
         <div class="d-flex flex-wrap align-items-center gap-3">
           <div class="form-check form-switch mb-0">
@@ -354,7 +392,6 @@
       </div>
     </section>
 
-
     <!-- US Sessions & World Markets -->
     <div class="row g-3 mb-3">
       <div class="col-lg-6">
@@ -507,7 +544,6 @@
   <!-- Bootstrap 5.3.3 Bundle JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-
   <!-- 1. Constants & helpers (لازم أول حاجة) -->
   <script src="assets/js/config.js"></script>
 
@@ -526,6 +562,8 @@
   <!-- 6. Scanner -->
   <script src="assets/js/scanner.js"></script>
 
+  <!-- 7. Live Chart (ملف الشارت المنفصل) -->
+  <script src="assets/js/chart.js"></script>
 
 </body>
 
