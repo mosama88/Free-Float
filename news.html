@@ -1,262 +1,16 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl" data-bs-theme="dark">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="assets/img/logo.ico" rel="icon" type="image/x-icon" />
+
   <title>بوابة أخبار السوق الأمريكي والخبطات السعرية — MOMO INVESTING PRO</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
-  <style>
-    body {
-      background-color: #060911;
-      color: #ffffff;
-      font-family: 'Segoe UI', Tahoma, 'Inter', system-ui, sans-serif;
-      min-height: 100vh;
-    }
-
-    /* الهيدر العلوي */
-    .top-nav-bar {
-      background: linear-gradient(90deg, #090d16 0%, #111827 50%, #090d16 100%);
-      border-bottom: 1px solid #1e293b;
-      padding: 12px 22px;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.85);
-    }
-    .brand-title {
-      font-size: 1.25rem;
-      font-weight: 900;
-      color: #ffffff;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .pulse-dot {
-      width: 10px;
-      height: 10px;
-      background: #10b981;
-      border-radius: 50%;
-      box-shadow: 0 0 12px #10b981;
-      animation: pulseDot 1.3s infinite;
-    }
-    @keyframes pulseDot { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.4); opacity: 0.45; } }
-
-    /* تبويبات الأقسام على غرار Investing.com */
-    .market-tabs-bar {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      overflow-x: auto;
-      border-bottom: 2px solid #1e293b;
-      padding-bottom: 8px;
-      margin-bottom: 18px;
-      scrollbar-width: none;
-    }
-    .mkt-tab {
-      background: transparent;
-      color: #94a3b8;
-      border: none;
-      padding: 6px 14px;
-      font-size: 0.92rem;
-      font-weight: 800;
-      border-radius: 6px;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: all 0.15s;
-    }
-    .mkt-tab:hover { color: #ffffff; background: #111827; }
-    .mkt-tab.active {
-      color: #38bdf8;
-      background: rgba(56, 189, 248, 0.12);
-      box-shadow: inset 0 -3px 0 #38bdf8;
-    }
-
-    /* 1. تصميم الخبر الرئيسي الضخم (Hero Featured News - Investing Style) */
-    .hero-news-card {
-      background: linear-gradient(145deg, #0b111e 0%, #111827 100%);
-      border: 1px solid #1e293b;
-      border-radius: 12px;
-      overflow: hidden;
-      margin-bottom: 20px;
-      cursor: pointer;
-      transition: transform 0.2s, border-color 0.2s;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.6);
-    }
-    .hero-news-card:hover {
-      border-color: #38bdf8;
-      transform: translateY(-2px);
-    }
-    .hero-img-wrap {
-      position: relative;
-      height: 100%;
-      min-height: 270px;
-      overflow: hidden;
-      background: #0f172a;
-    }
-    .hero-img-wrap img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.4s ease;
-    }
-    .hero-news-card:hover .hero-img-wrap img { transform: scale(1.04); }
-    .hero-content {
-      padding: 22px 24px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-    .hero-title {
-      font-size: 1.55rem;
-      font-weight: 900;
-      color: #ffffff;
-      line-height: 1.4;
-      margin-bottom: 12px;
-    }
-    .hero-desc {
-      font-size: 0.98rem;
-      color: #cbd5e1;
-      line-height: 1.7;
-      margin-bottom: 16px;
-    }
-
-    /* 2. شبكة الكروت المصورة الرباعية (Sub-News Carousel Grid) */
-    .sub-news-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-      margin-bottom: 26px;
-    }
-    @media (max-width: 1200px) { .sub-news-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 640px)  { .sub-news-grid { grid-template-columns: 1fr; } }
-
-    .news-visual-card {
-      background: #0b111e;
-      border: 1px solid #1e293b;
-      border-radius: 10px;
-      overflow: hidden;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      transition: all 0.2s ease;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.45);
-    }
-    .news-visual-card:hover {
-      transform: translateY(-4px);
-      border-color: #38bdf8;
-      box-shadow: 0 12px 28px rgba(56, 189, 248, 0.2);
-    }
-    .nvc-img-box {
-      position: relative;
-      height: 155px;
-      overflow: hidden;
-      background: #0f172a;
-    }
-    .nvc-img-box img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.35s ease;
-    }
-    .news-visual-card:hover .nvc-img-box img { transform: scale(1.06); }
-    .nvc-tag {
-      position: absolute;
-      bottom: 8px;
-      right: 8px;
-      background: rgba(9, 13, 22, 0.88);
-      color: #fde047;
-      border: 1px solid rgba(250, 204, 21, 0.4);
-      font-size: 0.72rem;
-      font-weight: 800;
-      padding: 2px 8px;
-      border-radius: 4px;
-      backdrop-filter: blur(4px);
-    }
-    .nvc-sym-pill {
-      position: absolute;
-      top: 8px;
-      left: 8px;
-      background: rgba(2, 132, 199, 0.92);
-      color: #ffffff;
-      font-size: 0.75rem;
-      font-weight: 900;
-      padding: 2px 8px;
-      border-radius: 5px;
-      direction: ltr;
-    }
-    .nvc-body {
-      padding: 12px 14px;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    .nvc-title {
-      font-size: 0.96rem;
-      font-weight: 800;
-      color: #ffffff;
-      line-height: 1.45;
-      margin-bottom: 10px;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-    .nvc-meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.75rem;
-      color: #94a3b8;
-      border-top: 1px solid rgba(255,255,255,0.06);
-      padding-top: 8px;
-    }
-
-    /* كروت الأخبار الإضافية (More News Feed) */
-    .more-news-list {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin-bottom: 24px;
-    }
-    @media (max-width: 992px) { .more-news-list { grid-template-columns: 1fr; } }
-    .mini-news-item {
-      display: flex;
-      gap: 12px;
-      background: #0b111e;
-      border: 1px solid #1e293b;
-      border-radius: 8px;
-      padding: 10px;
-      cursor: pointer;
-      transition: border-color 0.15s, background 0.15s;
-    }
-    .mini-news-item:hover { border-color: #38bdf8; background: #10192b; }
-    .mini-news-img {
-      width: 110px;
-      height: 78px;
-      border-radius: 6px;
-      object-fit: cover;
-      flex-shrink: 0;
-      background: #1e293b;
-    }
-
-    /* الفلاتر */
-    .filter-card {
-      background: #090d16;
-      border: 1px solid #1e293b;
-      border-radius: 10px;
-      padding: 12px 16px;
-      margin-bottom: 16px;
-    }
-    .form-control, .form-select {
-      background-color: #0f172a !important;
-      border-color: #334155 !important;
-      color: #ffffff !important;
-      font-weight: 700;
-      font-size: 0.85rem;
-    }
-  </style>
+  <link rel="stylesheet" href="assets/css/news.css" />
 </head>
+
 <body>
 
   <!-- الهيدر العلوي -->
@@ -268,9 +22,11 @@
 
     <div class="d-flex align-items-center gap-2 flex-wrap">
       <span id="newsStatus" class="fw-bold text-warning small me-2">⏳ جاري جلب وترجمة أحدث الأخبار...</span>
-      <span class="badge bg-dark border border-secondary text-light">آخر تحديث: <b id="newsLastUpdate">--:--:--</b></span>
+      <span class="badge bg-dark border border-secondary text-light">آخر تحديث: <b
+          id="newsLastUpdate">--:--:--</b></span>
       <button id="nfScanBtn" class="btn btn-success btn-sm fw-bold">🔄 تحديث الأخبار الآن</button>
-      <a href="index.html" class="btn btn-sm fw-bold" style="background: linear-gradient(135deg, #0284c7, #2563eb); color: #fff; border: 1px solid #38bdf8;">
+      <a href="index.html" class="btn btn-sm fw-bold"
+        style="background: linear-gradient(135deg, #0284c7, #2563eb); color: #fff; border: 1px solid #38bdf8;">
         🏠 العودة للاسكانر والحاسبة الرئيسية
       </a>
     </div>
@@ -288,7 +44,8 @@
       <button class="mkt-tab" data-cat="macro">🏛️ المؤشرات والفيدرالي (Markets & Macro)</button>
       <button class="mkt-tab" data-cat="offering">⚠️ تحذيرات طرح الأسهم (Offering Alerts)</button>
       <div class="ms-auto d-flex align-items-center gap-2">
-        <input type="text" id="nfSearch" class="form-control form-control-sm" style="width:190px;" placeholder="🔍 ابحث عن سهم أو خبر...">
+        <input type="text" id="nfSearch" class="form-control form-control-sm" style="width:190px;"
+          placeholder="🔍 ابحث عن سهم أو خبر...">
       </div>
     </div>
 
@@ -324,7 +81,8 @@
             <button class="btn btn-sm btn-outline-info chart-tf-btn" data-tf="1">1m</button>
             <button class="btn btn-sm btn-outline-info chart-tf-btn active" data-tf="5">5m</button>
             <button class="btn btn-sm btn-outline-info chart-tf-btn" data-tf="15">15m</button>
-            <button class="btn btn-sm btn-warning fw-bold" id="sendToMainCalcBtn">🧮 إرسال السهم للحاسبة الرئيسية ↵</button>
+            <button class="btn btn-sm btn-warning fw-bold" id="sendToMainCalcBtn">🧮 إرسال السهم للحاسبة الرئيسية
+              ↵</button>
             <button class="btn btn-sm btn-outline-light" id="closeNewsChartBtn">✕ إغلاق الشارت</button>
           </div>
         </div>
@@ -336,7 +94,8 @@
 
     <!-- 3. لوحات الخبطات الـ 6 (Momos Catalyst Panels) -->
     <div class="d-flex justify-content-between align-items-center mb-2 mt-3">
-      <h6 class="m-0 fw-black text-warning">⚡ رادار الأسهم ذات الخبطات السعرية اللحظية (إشارات TP1 / TP2 / TP3 / SL)</h6>
+      <h6 class="m-0 fw-black text-warning">⚡ رادار الأسهم ذات الخبطات السعرية اللحظية (إشارات TP1 / TP2 / TP3 / SL)
+      </h6>
       <div class="d-flex align-items-center gap-3">
         <div class="form-check form-switch m-0">
           <input class="form-check-input" type="checkbox" id="nfAuto" checked>
@@ -353,7 +112,8 @@
     <!-- 4. جدول الأخبار المرتبطة بالأسهم وأهداف القنص -->
     <section class="card border-secondary mb-4" style="background: #070b14;">
       <div class="card-header d-flex justify-content-between align-items-center py-2" style="background: #0d1322;">
-        <h6 class="m-0 fw-black text-white">🎯 جدول خبطات الأسهم والأخبار المترجمة مع أهداف القناص (اضغط على أي صف لفتح الشارت)</h6>
+        <h6 class="m-0 fw-black text-white">🎯 جدول خبطات الأسهم والأخبار المترجمة مع أهداف القناص (اضغط على أي صف لفتح
+          الشارت)</h6>
         <span class="badge bg-primary" id="newsTotalCount">0 فرصة</span>
       </div>
       <div class="table-responsive">
@@ -382,6 +142,7 @@
 
   </main>
 
-    <script src="assets/js/news.js"></script>
+  <script src="assets/js/news.js"></script>
 </body>
+
 </html>
